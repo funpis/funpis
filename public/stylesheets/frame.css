@@ -199,6 +199,34 @@ article {
     min-width: 50px;
 }
 
+#panel>div>div.item_title {
+    max-width: 280px;
+    min-width: 150px;
+    height: 20px;
+    margin-top: 0;
+    padding: 0;
+    border: 0;
+    background-color: white;
+    border-collapse:collapse;
+    position: relative;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#panel>div>div.item_title span {
+    position: absolute;
+    transform: translateX(0);
+    transition: 10s;
+}
+
+#panel>div>div.item_title:hover span {
+    cursor: pointer;
+    cursor: hand;
+    transform: translateX(calc(280px - 100%));
+}
+
 #panel>div>div.item_foot {
     width: 100%;
     height: 32px;
@@ -317,3 +345,4 @@ div.div_account_button_on {
     font-weight: bold;
     background-color: grey; 
 }
+

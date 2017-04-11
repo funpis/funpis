@@ -9,6 +9,11 @@ router.get('/', function(req, res, next) {
   res.render('index', {title: 'FunPis', user: req.user});
 });
 
+/* GET topic page. */
+router.get('/topic', function(req, res, next) {
+  res.render('topic', {title: 'FunPis', user: req.user});
+});
+
 /*
 router.get('/', function(req, res) {
 	res.render('index', { user: req.user });

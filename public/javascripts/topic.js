@@ -1,16 +1,16 @@
 $(document).ready(function() {
-    $('article').bottom({proximity: 0.02});
-    $('article').bind('bottom', function() {
+    $('#right_block').bottom({proximity: 0.02});
+    $('#right_block').bind('bottom', function() {
         var obj = $(this);
         if (!obj.data('loading')) {
             obj.data('loading', true);
 
-            $('#panel').append('<div class="loading"><p>Loading topics...</p></div>');
+            $('#right_block').append('<div class="loading"><p>Loading comments...</p></div>');
 
             setTimeout(function() {
-                $('#panel>div.loading').remove();
+                $('#right_block>div.loading').remove();
 
-                downloadPics();
+                //downloadPics();
 
                 obj.data('loading', false);
             }, 1000);
@@ -21,7 +21,8 @@ $(document).ready(function() {
     showHeader();
     showTabColumn();
 
-    readInitPics();
+    loadTopic();
+    loadComment();
 });
 
 function showHeader() {
@@ -100,9 +101,9 @@ $(function() {
     });
 });
 
-function loadPic(url) {
+function loadTopicPic(div_topic, url) {
     var w, h;
-    var wmax = 280, hmax = 300;
+    var wmax = $('#left_block').width() - 10;
 
     var pic = $('<img />')
         .attr({
@@ -119,28 +120,40 @@ function loadPic(url) {
                     h = parseInt((h * wmax) / w);
                     w = wmax;
                 }
-                if (h > hmax) {
-                    w = parseInt((w * hmax) / h);
-                    h = hmax;
-                }
                 this.width = w;
                 this.height = h;
             }
         });
 
-    var $div_item = $('<div>',
+    div_topic.append($('<a>',
+    {
+        href: url,
+        html: pic
+    }));
+}
+
+function loadTopicTxt(div_topic, url, txt) {
+    div_topic.append($('<a>',
+    {
+        href: url,
+        html: txt
+    }));
+}
+
+function loadTopic() {
+    var $div_topic = $('<div>',
         {
-            "class": "item"
+            "class": "topic"
         });
 
-    var $div_item_head = $('<div>',
+    var $div_topic_head = $('<div>',
         {
-            "class": "item_head"
+            "class": "topic_head"
         });
 
-    $div_item_head.append('<div class="item_head_publisher">@liupeng</div>');
+    $div_topic_head.append('<div class="topic_head_publisher">@liupeng</div>');
 
-    var $div_countdown = $('<div class="item_head_countdown"></div>')
+    var $div_countdown = $('<div class="topic_head_countdown"></div>')
         .countdown('2018/02/21 14:13:00', {elapse: false})
         .on('update.countdown', function(event) {
             var totalHours = event.offset.totalDays * 24 + event.offset.hours;
@@ -157,40 +170,38 @@ function loadPic(url) {
         .on('finish.countdown', function(event) {
             $(this).html('expired');
         });
-    $div_item_head.append($div_countdown);
+    $div_topic_head.append($div_countdown);
 
-    $div_item.append($div_item_head);
+    $div_topic.append($div_topic_head);
 
     var $div_title = $('<div>',
     {
-        "class": "item_title",
-        "html": "<span>abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ</span>"
+        "class": "topic_title",
+        "html": "<span>abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ<span>"
     })
-    $div_item.append($div_title);
+    $div_topic.append($div_title);
 
-    $div_item.append($('<a>',
-        {
-            href: url,
-            html: pic
-        }));
+    loadTopicPic($div_topic, picUrl[0]);
+    loadTopicTxt($div_topic, picUrl[0], "aaaaaaaaaa");
 
-    var $div_item_foot = $('<div>',
+    var $div_topic_foot = $('<div>',
         {
-            "class": "item_foot",
-            html: '<div class="item_foot_left">' +
+            "class": "topic_foot",
+            html: '<div class="topic_foot_left">' +
                     '<div class="div_hover_click"><img src="http://192.168.91.197:3000/images/24/heart1.png" alt="UP" title="UP" /></div>' +
                     '<div class="div_left_margin" style="font-size:1.5em;">999K</div>' +
                   '</div>' + 
-                  '<div class="item_foot_right">' +
+                  '<div class="topic_foot_right">' +
                     '<div class="div_hover_click div_left_margin"><img src="http://192.168.91.197:3000/images/24/channel.png" alt="COMMENT" title="COMMENT" /></div>' +
                     '<div class="div_left_margin" style="font-size:1.5em;">888K</div>' +
                     '<div class="div_hover_click div_left_margin"><img src="http://192.168.91.197:3000/images/24/forward.png" alt="SEND" title="SEND" /></div>' +
                     '<div class="div_left_margin" style="font-size:1.5em;">777K</div>' +
                   '</div>'
         });
-    $div_item.append($div_item_foot);
+    $div_topic.append($div_topic_foot);
 
-    $('#panel').append($div_item);
+    $('#left_block').empty();
+    $('#left_block').append($div_topic);
 }
 
 var picUrl = [
@@ -203,23 +214,41 @@ var picUrl = [
     "http://192.168.91.197:3000/funimg/29.gif",
     "http://192.168.91.197:3000/funimg/beijing.jpg",
 ];
-function readInitPics() {
-    $('#panel').empty();
 
-    for (var i = 0; i < picUrl.length; i++) {
-        loadPic(picUrl[i]);
-    }
+var topic = {
+    "id": "1234567890",
+    "title": "test topic",
+    "author": {
+        "name": "liupeng",
+        "url": "http://google.com"
+    },
+    "expire_time": "2018/02/21 14:13:00",
+    "publisher": {
+        "name": "yahoo",
+        "time": "2017/02/21 14:13:00"
+    },
+    "paragraph": [
+        {
+            "id": "1234567890a",
+            "type": "text",
+            "url": "",
+        }
+    ]
 }
 
-function downloadPics() {
-    for (var i = 0; i < 5; i++) {
-        loadPic(picUrl[i]);
-    }
-}
+function loadComment() {
+    $('#right_block').empty();
 
-function showLogin() {
-    $('#panel').empty();
+    var $div_comment_a = $('<div>',
+        {
+            "class": "comment_a"
+        });
 
+    $div_comment_a.append('first comment');
+
+    $('#right_block').append($div_comment_a);
+
+/*
     $('#panel').append('<div style="width:100%; height:100px;"></div>');
 
     var $div_login_username = $('<div>',
@@ -248,6 +277,7 @@ function showLogin() {
                   '<div class="content"><button type=button onclick="window.location.reload()">CANCEL</button></div>'
         });
     $('#panel').append($div_login_button);
+*/
 }
 
 function post(path, params) {

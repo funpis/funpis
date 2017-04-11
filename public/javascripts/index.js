@@ -5,7 +5,7 @@ $(document).ready(function() {
         if (!obj.data('loading')) {
             obj.data('loading', true);
 
-            $('#panel').append('<div class="loading"><p>Loading topics...</p></div>');
+            $('#panel').append('<div class="loading"><p>Loading...</p></div>');
 
             setTimeout(function() {
                 $('#panel>div.loading').remove();

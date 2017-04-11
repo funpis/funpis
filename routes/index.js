@@ -10,8 +10,8 @@ router.get('/', function(req, res, next) {
 });
 
 /* GET topic page. */
-router.get('/topic', function(req, res, next) {
-  res.render('topic', {title: 'FunPis', user: req.user});
+router.get('/vote', function(req, res, next) {
+  res.render('vote', {title: 'VoteRun', user: req.user});
 });
 
 /*

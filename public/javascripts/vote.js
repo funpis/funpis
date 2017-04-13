@@ -132,6 +132,67 @@ function loadTopicPic(div_topic, url) {
     }));
 }
 
+function loadVoteGraph(div_topic) {
+    var w, h;
+    var wmax = $('#left_block').width() - 10;
+
+    var canvas = $('<canvas/>')
+        .attr({id: 'canvas1'})
+        .width(wmax)
+        .height(500);
+
+    div_topic.append(canvas);
+
+    Chart.defaults.global.hover.mode = 'nearest';
+
+    var myChart = new Chart(canvas, {
+        type: 'bar',
+        data: {
+            labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+            datasets: [{
+                label: '# of Votes',
+                data: [12, 19, 3, 5, 2, 3],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                /*
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                */
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero:true
+                    }
+                }]
+            },
+            hover: {
+                mode: 'index'
+            },
+/*
+            events: ["click"],
+            onClick: {}
+*/
+        }
+    });
+
+}
+
 function loadTopicTxt(div_topic, url, txt) {
     div_topic.append($('<a>',
     {
@@ -181,8 +242,11 @@ function loadTopic() {
     })
     $div_topic.append($div_title);
 
+/*
     loadTopicPic($div_topic, picUrl[0]);
     loadTopicTxt($div_topic, picUrl[0], "aaaaaaaaaa");
+*/
+    loadVoteGraph($div_topic);
 
     var $div_topic_foot = $('<div>',
         {

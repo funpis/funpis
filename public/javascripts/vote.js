@@ -136,16 +136,13 @@ function loadVoteGraph(div_topic) {
     var w, h;
     var wmax = $('#left_block').width() - 10;
 
-    var canvas = $('<canvas/>')
-        .attr({id: 'canvas1'})
+    var myCanvas = $('<canvas/>')
         .width(wmax)
         .height(500);
 
-    div_topic.append(canvas);
+    div_topic.append(myCanvas);
 
-    Chart.defaults.global.hover.mode = 'nearest';
-
-    var myChart = new Chart(canvas, {
+    var myChart = new Chart(myCanvas, {
         type: 'bar',
         data: {
             labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
@@ -180,17 +177,21 @@ function loadVoteGraph(div_topic) {
                         beginAtZero:true
                     }
                 }]
-            },
-            hover: {
-                mode: 'index'
-            },
-/*
-            events: ["click"],
-            onClick: {}
-*/
+            }
         }
     });
 
+    myCanvas.click(
+        function(evt){
+            var p = myChart.getElementsAtEvent(evt);
+            var clickedElementIndex = p[0]["_index"];
+            alert(clickedElementIndex);
+            var label = myChart.data.labels[clickedElementIndex];
+            alert(label);
+            var value = myChart.data.datasets[0].data[clickedElementIndex];
+            alert(value);
+        }
+    );
 }
 
 function loadTopicTxt(div_topic, url, txt) {

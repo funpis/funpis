@@ -8,6 +8,14 @@ var Account = new Schema({
     email: String
 });
 
+var Vote = new Schema({
+    vid: String,
+    title: String,
+    chart_type: String,
+    chart_data: String,
+    chart_options: String
+});
+
 Account.plugin(passportLocalMongoose);
 
 module.exports = {

@@ -4,14 +4,36 @@ var Account = require('../mongo').Account;
 var router = express.Router();
 var util = require('util');
 
+/* calculate a vote id */
+function make_vote_id() {
+	var chars = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	var cl = chars.length;
+	var r = "";
+
+	for (var i=0; i<11; i++) {
+		r += chars[Math.floor(Math.random()*cl)]
+	}
+
+	return r;
+}
+
+function read_vote_from_db(vid) {
+
+}
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', {title: 'FunPis', user: req.user});
 });
 
-/* GET topic page. */
+/* GET vote page. */
 router.get('/vote', function(req, res, next) {
   res.render('vote', {title: 'VoteRun', user: req.user});
+});
+
+/* GET vote page by a vote id. */
+router.get('/v/:vid', function(req, res, next) {
+  res.render('getvote', {title: 'VoteRun', user: req.user, vid: req.params.vid});
 });
 
 /*

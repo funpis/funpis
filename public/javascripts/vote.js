@@ -216,24 +216,31 @@ function loadTopic() {
             "class": "topic"
         });
 
+    var $div_title = $('<div>',
+    {
+        "class": "topic_title",
+        "html": '<span style="font-size:1.5em;">abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ<span>'
+    });
+    $div_topic.append($div_title);
+
     var $div_topic_head = $('<div>',
         {
             "class": "topic_head"
         });
 
-    $div_topic_head.append('<div class="topic_head_publisher">@liupeng</div>');
+    $div_topic_head.append('<div class="topic_head_publisher">Run by ' + '@liupeng' + '</div>');
 
     var $div_countdown = $('<div class="topic_head_countdown"></div>')
         .countdown('2018/02/21 14:13:00', {elapse: false})
         .on('update.countdown', function(event) {
-            var totalHours = event.offset.totalDays * 24 + event.offset.hours;
+            var totalHours = event.offset.totalDays * 24 + event.offset.hours + 'h';
             if (totalHours < 1) {
-                $(this).html('<font color="red">' + 
-                             event.strftime(totalHours + ':%M:%S') +
+                $(this).html('<font color="red">Left ' + 
+                             event.strftime(totalHours + ':%Mm:%Ss') +
                              '</font>');
             } else {
-                $(this).html('<font color="black">' + 
-                             event.strftime(totalHours + ':%M:%S') +
+                $(this).html('<font color="black">Left ' + 
+                             event.strftime(totalHours + ':%Mm:%Ss') +
                              '</font>');
             }
         })
@@ -243,13 +250,6 @@ function loadTopic() {
     $div_topic_head.append($div_countdown);
 
     $div_topic.append($div_topic_head);
-
-    var $div_title = $('<div>',
-    {
-        "class": "topic_title",
-        "html": "<span>abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ<span>"
-    })
-    $div_topic.append($div_title);
 
 /*
     loadTopicPic($div_topic, picUrl[0]);
@@ -295,23 +295,72 @@ function loadTopic() {
         }\
     }';
 
-    loadVoteGraph($div_topic, chart_type, chart_data, chart_options);
+    var $div_vote_graph = $('<div>',
+    {
+        "class": "vote_graph"
+    })
+    loadVoteGraph($div_vote_graph, chart_type, chart_data, chart_options);
+    $div_topic.append($div_vote_graph);
+
+    var html_vote_graph_legend = '<table style="table-layout:fixed; width:100%; word-wrap:break-word;">' +
+        '<colgroup>' +
+        '<col style="width:20%;">' +
+        '<col style="width:80%;">' +
+        '</colgroup>' +
+        '<tr>' +
+        '<td valign="top">' + 'Red :' + '</td>' +
+        '<td valign="top">' + '中国からインターネット経由で日本の通販サイトなどで買い物をした金額が、２０１６年に初めて１兆円を突破したことが経済産業省の調査でわかった。' + '</td>' +
+        '</tr>' +
+        '<tr>' +
+        '<td valign="top">' + 'Blue :' + '</td>' +
+        '<td valign="top">' + 'BlueBlueBlue' + '</td>' +
+        '</tr>' +
+        '<tr>' +
+        '<td valign="top">' + 'Yellow :' + '</td>' +
+        '<td valign="top">' + '123' + '</td>' +
+        '</tr>' +
+        '<tr>' +
+        '<td valign="top">' + 'Green :' + '</td>' +
+        '<td valign="top">' + 'abc' + '</td>' +
+        '</tr>' +
+        '<tr>' +
+        '<td valign="top">' + 'Purple :' + '</td>' +
+        '<td valign="top">' + 'abcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabc' + '</td>' +
+        '</tr>' +
+        '<tr>' +
+        '<td valign="top">' + 'Orange :' + '</td>' +
+        '<td valign="top">' + '456' + '</td>' +
+        '</tr>' +
+        '</table>'
+    var $div_vote_graph_legend = $('<div>',
+    {
+        "class": "vote_graph_legend",
+        "html": html_vote_graph_legend
+    })
+    $div_topic.append($div_vote_graph_legend);
 
     var $div_topic_foot = $('<div>',
         {
             "class": "topic_foot",
             html: '<div class="topic_foot_left">' +
-                    '<div class="div_hover_click"><img src="http://192.168.91.197:3000/images/24/heart1.png" alt="UP" title="UP" /></div>' +
-                    '<div class="div_left_margin" style="font-size:1.5em;">999K</div>' +
+                    '<div class="div_hover_click"><img height="25" src="http://192.168.91.197:3000/images/camera48.png" alt="SHOOT" title="SHOOT" /></div>' +
+                    '<div class="div_left_margin" style="font-size:1.2em;">999K</div>' +
                   '</div>' + 
                   '<div class="topic_foot_right">' +
-                    '<div class="div_hover_click div_left_margin"><img src="http://192.168.91.197:3000/images/24/channel.png" alt="COMMENT" title="COMMENT" /></div>' +
-                    '<div class="div_left_margin" style="font-size:1.5em;">888K</div>' +
-                    '<div class="div_hover_click div_left_margin"><img src="http://192.168.91.197:3000/images/24/forward.png" alt="SEND" title="SEND" /></div>' +
-                    '<div class="div_left_margin" style="font-size:1.5em;">777K</div>' +
+                    '<div class="div_hover_click div_left_margin"><img height="25" src="http://192.168.91.197:3000/images/quote48.png" alt="QUOTE" title="QUOTE" /></div>' +
+                    '<div class="div_left_margin" style="font-size:1.2em;">888K</div>' +
+                    '<div class="div_hover_click div_left_margin"><img height="30" src="http://192.168.91.197:3000/images/glasses48.png" alt="WATCH" title="WATCH" /></div>' +
+                    '<div class="div_left_margin" style="font-size:1.2em;">777K</div>' +
                   '</div>'
         });
     $div_topic.append($div_topic_foot);
+
+    var $div_vote_topic = $('<div>',
+    {
+        "class": "vote_topic",
+        "html": '<Hr Align="center" Width="80%">vote topic<br>aliegnapnvbgnvbaomvnv'
+    })
+    $div_topic.append($div_vote_topic);
 
     $('#left_block').empty();
     $('#left_block').append($div_topic);

@@ -322,6 +322,11 @@ div.div_hover_click {
     cursor: hand;
 }
 
+div.div_hover_click_shoot {
+    cursor: pointer;
+    cursor: hand;
+}
+
 div.div_left_margin {
     margin-left: 3px;
 }

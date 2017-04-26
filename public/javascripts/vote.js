@@ -137,8 +137,11 @@ function loadVoteGraph(div_topic, chart_type, chart_data, chart_options) {
     var wmax = $('#left_block').width() - 10;
 
     var myCanvas = $('<canvas/>')
+        .attr({
+            id: "canvas_vote_graph"
+        })
         .width(wmax)
-        .height(500);
+        .height(300);
 
     div_topic.append(myCanvas);
 
@@ -297,10 +300,27 @@ function loadTopic() {
 
     var $div_vote_graph = $('<div>',
     {
+        "id": "div_vote_graph",
         "class": "vote_graph"
     })
     loadVoteGraph($div_vote_graph, chart_type, chart_data, chart_options);
     $div_topic.append($div_vote_graph);
+
+    var $div_vote_func = $('<div>',
+        {
+            "class": "topic_foot",
+            html: '<div class="topic_foot_left">' +
+                    '<div class="div_hover_click_shoot" onclick="clickShoot()" data-clipboard-target="#canvas_vote_graph" data-clipboard-action="copy"><img height="25" src="http://192.168.91.197:3000/images/camera48.png" alt="SHOOT" title="SHOOT" /></div>' +
+                    '<div class="div_left_margin" style="font-size:1.2em;">999K</div>' +
+                  '</div>' + 
+                  '<div class="topic_foot_right">' +
+                    '<div class="div_hover_click div_left_margin"><img height="25" src="http://192.168.91.197:3000/images/quote48.png" alt="QUOTE" title="QUOTE" /></div>' +
+                    '<div class="div_left_margin" style="font-size:1.2em;">888K</div>' +
+                    '<div class="div_hover_click div_left_margin"><img height="30" src="http://192.168.91.197:3000/images/glasses48.png" alt="WATCH" title="WATCH" /></div>' +
+                    '<div class="div_left_margin" style="font-size:1.2em;">777K</div>' +
+                  '</div>'
+        });
+    $div_topic.append($div_vote_func);
 
     var html_vote_graph_legend = '<table style="table-layout:fixed; width:100%; word-wrap:break-word;">' +
         '<colgroup>' +
@@ -339,22 +359,6 @@ function loadTopic() {
     })
     $div_topic.append($div_vote_graph_legend);
 
-    var $div_topic_foot = $('<div>',
-        {
-            "class": "topic_foot",
-            html: '<div class="topic_foot_left">' +
-                    '<div class="div_hover_click"><img height="25" src="http://192.168.91.197:3000/images/camera48.png" alt="SHOOT" title="SHOOT" /></div>' +
-                    '<div class="div_left_margin" style="font-size:1.2em;">999K</div>' +
-                  '</div>' + 
-                  '<div class="topic_foot_right">' +
-                    '<div class="div_hover_click div_left_margin"><img height="25" src="http://192.168.91.197:3000/images/quote48.png" alt="QUOTE" title="QUOTE" /></div>' +
-                    '<div class="div_left_margin" style="font-size:1.2em;">888K</div>' +
-                    '<div class="div_hover_click div_left_margin"><img height="30" src="http://192.168.91.197:3000/images/glasses48.png" alt="WATCH" title="WATCH" /></div>' +
-                    '<div class="div_left_margin" style="font-size:1.2em;">777K</div>' +
-                  '</div>'
-        });
-    $div_topic.append($div_topic_foot);
-
     var $div_vote_topic = $('<div>',
     {
         "class": "vote_topic",
@@ -364,6 +368,49 @@ function loadTopic() {
 
     $('#left_block').empty();
     $('#left_block').append($div_topic);
+}
+
+/*
+var clipboard = new Clipboard('.btn');
+clipboard.on('success', function(e) {
+    alert(11);
+});
+clipboard.on('error', function(e) {
+    alert(22);
+});
+*/
+
+function clickShoot() {
+    var clipboard = new Clipboard('.div_hover_click_shoot');
+    clipboard.on('success', function(e) {
+        alert(11);
+    });
+    clipboard.on('error', function(e) {
+        alert(22);
+    });
+
+/*
+    target = document.getElementById('div_vote_graph')
+    html2canvas(target, {
+        onrendered: function(canvas) {
+            //document.body.appendChild(canvas);
+            var image = new Image();
+            image.id = "pic";
+            image.src = canvas.toDataURL();
+            image.height = c.clientHeight;
+            image.width = c.clientWidth;
+            window.open(image.src, 'Chart');
+            alert(11);
+
+new Clipboard('.div_hover_click_shoot', {
+    target: function() {
+        return canvas;
+    text: function() {
+        return 'return liupeng';
+    }
+});
+    });
+*/
 }
 
 var picUrl = [

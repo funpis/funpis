@@ -22,7 +22,9 @@ $(document).ready(function() {
     showTabColumn();
 
     loadTopic();
+
     loadComment();
+
 });
 
 function showHeader() {
@@ -310,7 +312,7 @@ function loadTopic() {
         {
             "class": "topic_foot",
             html: '<div class="topic_foot_left">' +
-                    '<div class="div_hover_click_shoot" onclick="clickShoot()" data-clipboard-target="#canvas_vote_graph" data-clipboard-action="copy"><img height="25" src="http://192.168.91.197:3000/images/camera48.png" alt="SHOOT" title="SHOOT" /></div>' +
+                    '<a id="a_shoot" href="#" onclick="clickShoot()"><div class="div_hover_click_shoot"><img height="25" src="http://192.168.91.197:3000/images/camera48.png" alt="SHOOT" title="SHOOT" /></div></a>' +
                     '<div class="div_left_margin" style="font-size:1.2em;">999K</div>' +
                   '</div>' + 
                   '<div class="topic_foot_right">' +
@@ -368,6 +370,58 @@ function loadTopic() {
 
     $('#left_block').empty();
     $('#left_block').append($div_topic);
+
+    /*
+    $("#a_shoot").on('click', function() {
+        html2canvas($("#div_vote_graph"), {
+            onrendered: function(canvas) {
+                var vote_image = canvas.toDataURL("image/jpg").replace(/^data:image\/jpg/, "data:application/octet-stream");
+                $("#a_shoot").attr("download", "hogehoge.jpg").attr("href", vote_image);
+            }
+        });
+    });
+    */
+
+/*
+    html2canvas($("#div_vote_graph"), {
+        onrendered: function(canvas) {
+            vote_canvas = canvas;
+        }
+    });
+*/
+    makePopupVoteGraph();
+
+}
+
+function makePopupVoteGraph() {
+    var $div_popup_vote_graph = $('<div>',
+    {
+        "id": "id_div_popup_vote_graph",
+        "class": "div_popup_vote_graph",
+        "html": '<span id="id_span_close_popup_vote_graph" class="span_close_popup_vote_graph"' +
+                '  onclick="document.getElementById(' + '\'id_div_popup_vote_graph\'' + ').style.display=' + '\'none\'' + '">&times;' +
+                '</span>' +
+                '<img id="id_img_popup_vote_graph" class="img_popup_vote_graph">' +
+                '<div id="id_div_popup_vote_graph_foot" class="div_popup_vote_graph_foot"></div>'
+    })
+    $('#left_block').append($div_popup_vote_graph);
+}
+
+function waitCanvas() {
+    var vote_canvas;
+
+    html2canvas($("#div_vote_graph"), {
+        onrendered: function(canvas) {
+            alert(11);
+            vote_canvas = canvas;
+        }
+    });
+
+    $("#a_shoot").on('click', function() {
+        alert(vote_canvas);
+        var vote_image = vote_canvas.toDataURL("image/jpg").replace(/^data:image\/jpg/, "data:application/octet-stream");
+        $("#a_shoot").attr("download", "hogehoge.jpg").attr("href", vote_image);
+    });
 }
 
 /*
@@ -381,6 +435,7 @@ clipboard.on('error', function(e) {
 */
 
 function clickShoot() {
+/*
     var clipboard = new Clipboard('.div_hover_click_shoot');
     clipboard.on('success', function(e) {
         alert(11);
@@ -388,20 +443,25 @@ function clickShoot() {
     clipboard.on('error', function(e) {
         alert(22);
     });
+*/
 
-/*
-    target = document.getElementById('div_vote_graph')
-    html2canvas(target, {
+    var data;
+
+    //$("#id_div_popup_vote_graph").style.display = "block";
+    document.getElementById("id_div_popup_vote_graph").style.display = "block";
+
+    html2canvas($("#div_vote_graph"), {
         onrendered: function(canvas) {
+            data = canvas.toDataURL("image/jpg").replace(/^data:image\/jpg/, "data:application/octet-stream");
+            //data = canvas.toDataURL("image/jpeg").replace("image/jpeg", "image/octet-stream");
+            document.getElementById("id_img_popup_vote_graph").src = data;
             //document.body.appendChild(canvas);
-            var image = new Image();
-            image.id = "pic";
-            image.src = canvas.toDataURL();
-            image.height = c.clientHeight;
-            image.width = c.clientWidth;
-            window.open(image.src, 'Chart');
-            alert(11);
+            document.getElementById("id_div_popup_vote_graph_foot").innerHTML = "test";
+        }
+    });
 
+            //$("#a_shoot").attr("download", "hogehoge.png").attr("href", data);
+/*
 new Clipboard('.div_hover_click_shoot', {
     target: function() {
         return canvas;
@@ -409,7 +469,6 @@ new Clipboard('.div_hover_click_shoot', {
         return 'return liupeng';
     }
 });
-    });
 */
 }
 

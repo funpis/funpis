@@ -94,7 +94,6 @@
 
 #left_block>div>div.topic_title:hover span {
     cursor: pointer;
-    cursor: hand;
     transform: translateX(calc(280px - 100%));
 }
 
@@ -144,6 +143,79 @@
 
 #left_block>div>div.vote_graph {
     margin-top: 5px;
+    background-color: white;
+}
+
+.div_popup_vote_graph {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    padding-top: 100px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.9);
+}
+
+.span_close_popup_vote_graph {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.span_close_popup_vote_graph:hover,
+.span_close_popup_vote_graph:focus {
+    color: #bbb;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.img_popup_vote_graph {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 700px;
+}
+
+
+.div_popup_vote_graph_foot {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 700px;
+    text-align: center;
+    color: #ccc;
+    padding: 10px 0;
+    height: 150px;
+}
+
+.img_popup_vote_graph, .div_popup_vote_graph_foot { 
+    -webkit-animation-name: zoom;
+    -webkit-animation-duration: 0.6s;
+    animation-name: zoom;
+    animation-duration: 0.6s;
+}
+
+@-webkit-keyframes zoom {
+    from {-webkit-transform:scale(0)} 
+    to {-webkit-transform:scale(1)}
+}
+
+@keyframes zoom {
+    from {transform:scale(0)} 
+    to {transform:scale(1)}
+}
+
+@media only screen and (max-width: 700px){
+    .img_popup_vote_graph {
+        width: 100%;
+    }
 }
 
 #right_block {

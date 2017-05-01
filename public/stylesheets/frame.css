@@ -102,7 +102,7 @@ a.a_header_menu:hover {
 #div_header_menu_account {
     max-width: 200px;
     min-width: 120px;
-    margin-left: : 10px;
+    margin-left: 10px;
     padding: 0;
     border: 0;
     display: flex;
@@ -125,7 +125,6 @@ div.div_column_tab {
     border: 0;
     text-align: center;
     cursor: pointer;
-    cursor: hand;
 }
 
 div.div_column_tab:hover {
@@ -223,7 +222,6 @@ article {
 
 #panel>div>div.item_title:hover span {
     cursor: pointer;
-    cursor: hand;
     transform: translateX(calc(280px - 100%));
 }
 
@@ -319,12 +317,10 @@ div.content {
 
 div.div_hover_click {
     cursor: pointer;
-    cursor: hand;
 }
 
 div.div_hover_click_shoot {
     cursor: pointer;
-    cursor: hand;
 }
 
 div.div_left_margin {
@@ -339,7 +335,6 @@ div.div_account_button {
     text-align: center;
     font-size: 20px;
     cursor: pointer;
-    cursor: hand;
 }
 
 div.div_account_button:hover {

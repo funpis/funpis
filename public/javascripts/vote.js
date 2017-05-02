@@ -21,6 +21,7 @@ $(document).ready(function() {
     showHeader();
     showTabColumn();
 
+    var data_vote_graph;
     loadTopic();
 
     loadComment();
@@ -401,7 +402,7 @@ function makePopupVoteGraph() {
         "html": '<span id="id_span_close_popup_vote_graph" class="span_close_popup_vote_graph"' +
                 '  onclick="document.getElementById(' + '\'id_div_popup_vote_graph\'' + ').style.display=' + '\'none\'' + '">&times;' +
                 '</span>' +
-                '<img id="id_img_popup_vote_graph" class="img_popup_vote_graph">' +
+                '<img id="id_img_popup_vote_graph" class="img_popup_vote_graph_loading" src="../images/generate_vote_graph.gif">' +
                 '<div id="id_div_popup_vote_graph_foot" class="div_popup_vote_graph_foot"></div>'
     })
     $('#left_block').append($div_popup_vote_graph);
@@ -445,18 +446,23 @@ function clickShoot() {
     });
 */
 
-    var data;
 
     //$("#id_div_popup_vote_graph").style.display = "block";
     document.getElementById("id_div_popup_vote_graph").style.display = "block";
 
     html2canvas($("#div_vote_graph"), {
         onrendered: function(canvas) {
-            data = canvas.toDataURL("image/jpg").replace(/^data:image\/jpg/, "data:application/octet-stream");
+            data_vote_graph = canvas.toDataURL("image/jpg").replace(/^data:image\/jpg/, "data:application/octet-stream");
             //data = canvas.toDataURL("image/jpeg").replace("image/jpeg", "image/octet-stream");
-            document.getElementById("id_img_popup_vote_graph").src = data;
+            document.getElementById("id_img_popup_vote_graph").className = "img_popup_vote_graph";
+            document.getElementById("id_img_popup_vote_graph").src = data_vote_graph;
             //document.body.appendChild(canvas);
-            document.getElementById("id_div_popup_vote_graph_foot").innerHTML = "test";
+            var html_popup_vote_graph = 
+                '  <a onclick="document.getElementById(' + '\'id_div_popup_vote_graph\'' + ').style.display=' + '\'none\'"><div width="50px" height="20px">CANCEL</div></a>' +
+                '  <div width="100px" height="20px">&nbsp;</div>' +
+                '  <a id="a_download" download="hogehoge.png" href=' + data_vote_graph + '><div width="50px" height="20px">DOWNLOAD</div></a>'
+
+            document.getElementById("id_div_popup_vote_graph_foot").innerHTML = html_popup_vote_graph;
         }
     });
 

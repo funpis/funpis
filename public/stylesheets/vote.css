@@ -176,13 +176,19 @@
     cursor: pointer;
 }
 
+.img_popup_vote_graph_loading {
+    margin: auto;
+    display: block;
+    width: 30%;
+    max-width: 700px;
+}
+
 .img_popup_vote_graph {
     margin: auto;
     display: block;
     width: 80%;
     max-width: 700px;
 }
-
 
 .div_popup_vote_graph_foot {
     margin: auto;
@@ -193,6 +199,11 @@
     color: #ccc;
     padding: 10px 0;
     height: 150px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
 }
 
 .img_popup_vote_graph, .div_popup_vote_graph_foot { 

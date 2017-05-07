@@ -608,8 +608,11 @@ var json_js_comment = [
 function loadComment() {
     $('#right_block').empty();
 
-    comments = jQuery.parseJSON(json_js_comment);
-    for (c in comments) {
+    var c_txt = JSON.stringify(json_js_comment);
+    var comments = jQuery.parseJSON(c_txt);
+    for (var i = 0; i < comments.length; i++) {
+        var c = comments[i];
+
         var $div_comment_set = $('<div>',
         {
             "class": "comment_set"

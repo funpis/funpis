@@ -1,6 +1,5 @@
 #panel_vote {
     width: 80%;
-    height: 100%;
     margin: auto;
     margin-top: 10px;
     display: flex;
@@ -22,6 +21,7 @@
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
+    overflow: auto;
 }
 
 #left_block>div.topic {
@@ -199,11 +199,6 @@
     color: #ccc;
     padding: 10px 0;
     height: 150px;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    align-items: center;
 }
 
 .img_popup_vote_graph, .div_popup_vote_graph_foot { 
@@ -231,6 +226,7 @@
 
 #right_block {
     width: 50%;
+    height: 800px;
     margin: 5px;
     padding: 0;
     border: 0;
@@ -239,6 +235,7 @@
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
+    overflow: auto; 
 }
 
 #right_block>div.loading {
@@ -248,10 +245,121 @@
     text-align: center;
 }
 
-#right_block>div.comment_a {
+#right_block>div.comment_set {
     width: 100%;
-    height: 20px;
     margin-top: 5px;
+    padding: 0;
+    border: 0;
+    background-color: white;
+    border-collapse:collapse;
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    align-content: flex-start;
+}
+
+#right_block>div>div.comment {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background-color: white;
+    border-collapse:collapse;
+    position: relative;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    align-content: flex-start;
+}
+
+#right_block>div>div>div.comment_left {
+    width: 30px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background-color: white;
+    border-collapse:collapse;
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    align-content: flex-start;
+}
+
+#right_block>div>div>div.comment_indent {
+    width: 30px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background-color: white;
+    border-collapse:collapse;
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    align-content: flex-start;
+}
+
+#right_block>div>div>div.comment_right {
+    min-width: 200px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background-color: white;
+    border-collapse:collapse;
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    align-content: flex-start;
+}
+
+#right_block>div>div>div>div.comment_right_top {
+    min-width: 200px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background-color: white;
+    border-collapse:collapse;
+    position: relative;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    align-content: flex-start;
+}
+
+#right_block>div>div>div>div>div.comment_right_item {
+    height: 20px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background-color: white;
+    border-collapse:collapse;
+    position: relative;
+}
+
+#right_block>div>div>div>div.comment_right_main {
+    min-width: 200px;
+    margin: 0;
     padding: 0;
     border: 0;
     background-color: white;

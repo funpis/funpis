@@ -10,7 +10,7 @@ function make_vote_id() {
 	var cl = chars.length;
 	var r = "";
 
-	for (var i=0; i<11; i++) {
+	for (var i=0; i<12; i++) {
 		r += chars[Math.floor(Math.random()*cl)]
 	}
 

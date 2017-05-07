@@ -9,7 +9,6 @@ html,body {
     flex-direction: column;
     flex-wrap: nowrap;
     height: 100%;
-    max-height: 100%;
     width: 100%;
 }
 
@@ -140,7 +139,10 @@ div.div_column_tab_on {
 article {
     width: 100%;
     flex: 1;
+    /*
     overflow: auto;
+    */
+    overflow: hidden;
     position: relative;
     background-color: white;
 }

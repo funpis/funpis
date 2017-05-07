@@ -21,12 +21,20 @@ $(document).ready(function() {
     showHeader();
     showTabColumn();
 
-    var data_vote_graph;
     loadTopic();
 
     loadComment();
 
+    adjustHeight();
 });
+
+function adjustHeight(){
+    var hsize = $(document).height() - 100;
+    $("#left_block").height(hsize);
+    $("#right_block").height(hsize);
+}
+
+$(window).resize(adjustHeight);
 
 function showHeader() {
     var $div_header_logo = $('<div>',
@@ -297,7 +305,13 @@ function loadTopic() {
             }]\
         },\
         "legend": {\
-            "display":false\
+            "display": false,\
+            "position": "right"\
+        },\
+        "title": {\
+            "display": true,\
+            "text": "test vote",\
+            "fontSize": 18\
         }\
     }';
 
@@ -365,7 +379,7 @@ function loadTopic() {
     var $div_vote_topic = $('<div>',
     {
         "class": "vote_topic",
-        "html": '<Hr Align="center" Width="80%">vote topic<br>aliegnapnvbgnvbaomvnv'
+        "html": '<Hr Align="center" Width="80%">vote topic<br>ali<br>egna<br>pnv<br>bgn<br>vba<br>omvnv<br>'
     })
     $div_topic.append($div_vote_topic);
 
@@ -452,14 +466,14 @@ function clickShoot() {
 
     html2canvas($("#div_vote_graph"), {
         onrendered: function(canvas) {
-            data_vote_graph = canvas.toDataURL("image/jpg").replace(/^data:image\/jpg/, "data:application/octet-stream");
+            var data_vote_graph = canvas.toDataURL("image/jpg").replace(/^data:image\/jpg/, "data:application/octet-stream");
             //data = canvas.toDataURL("image/jpeg").replace("image/jpeg", "image/octet-stream");
             document.getElementById("id_img_popup_vote_graph").className = "img_popup_vote_graph";
             document.getElementById("id_img_popup_vote_graph").src = data_vote_graph;
             //document.body.appendChild(canvas);
             var html_popup_vote_graph = 
-                '  <a onclick="document.getElementById(' + '\'id_div_popup_vote_graph\'' + ').style.display=' + '\'none\'"><div width="50px" height="20px">CANCEL</div></a>' +
-                '  <div width="100px" height="20px">&nbsp;</div>' +
+                //'  <a onclick="document.getElementById(' + '\'id_div_popup_vote_graph\'' + ').style.display=' + '\'none\'"><div width="50px" height="20px">CANCEL</div></a>' +
+                //'  <div width="100px" height="20px">&nbsp;</div>' +
                 '  <a id="a_download" download="hogehoge.png" href=' + data_vote_graph + '><div width="50px" height="20px">DOWNLOAD</div></a>'
 
             document.getElementById("id_div_popup_vote_graph_foot").innerHTML = html_popup_vote_graph;
@@ -489,8 +503,8 @@ var picUrl = [
     "http://192.168.91.197:3000/funimg/beijing.jpg",
 ];
 
-var topic = {
-    "id": "1234567890",
+var json_topic = {
+    "id": "123456789012",
     "title": "test topic",
     "author": {
         "name": "liupeng",
@@ -508,19 +522,156 @@ var topic = {
             "url": "",
         }
     ]
-}
+};
+
+var json_db_comment = {
+    "comment_id": "1234567890ab",
+    "vote_id": "123456789012",
+    "publish_time": "2017-04-28T18:43:45+09:00",
+    "publisher": {
+        "name": "test01",
+        "url": "http://yahoo.co.jp",
+        "icon": "http://192.168.91.197:3000/funimg/einstein01.jpeg"
+    },
+    "content": "test comment",
+    "parent_id": "none"
+};
+
+var json_js_comment = [
+    {
+        "comment_id": "1234567890aa",
+        "publish_time": "2017-04-28T18:43:45+09:00",
+        "publisher": {
+            "name": "test01",
+            "url": "http://yahoo.co.jp",
+            "icon": "http://192.168.91.197:3000/funimg/einstein01.jpeg"
+        },
+        "content": "test comment 1",
+        "child": [
+            {
+            "comment_id": "1234567890ab",
+            "publish_time": "2017-04-28T18:43:45+09:00",
+            "publisher": {
+                "name": "test02",
+                "url": "http://yahoo.co.jp",
+                "icon": "http://192.168.91.197:3000/funimg/einstein01.jpeg"
+                },
+            "content": "test comment 2"
+            },
+            {
+            "comment_id": "1234567890ac",
+            "publish_time": "2017-04-28T18:43:45+09:00",
+            "publisher": {
+                "name": "test03",
+                "url": "http://yahoo.co.jp",
+                "icon": "http://192.168.91.197:3000/funimg/einstein01.jpeg"
+                },
+            "content": "test comment 3"
+            }
+        ]
+    },
+    {
+        "comment_id": "1234567890ba",
+        "publish_time": "2017-04-28T18:43:45+09:00",
+        "publisher": {
+            "name": "test11",
+            "url": "http://yahoo.co.jp",
+            "icon": "http://192.168.91.197:3000/funimg/einstein01.jpeg"
+        },
+        "content": "test comment 11",
+        "child": [
+            {
+            "comment_id": "1234567890ac",
+            "publish_time": "2017-04-28T18:43:45+09:00",
+            "publisher": {
+                "name": "test12",
+                "url": "http://yahoo.co.jp",
+                "icon": "http://192.168.91.197:3000/funimg/einstein01.jpeg"
+                },
+            "content": "test comment 12"
+            }
+        ]
+    },
+    {
+        "comment_id": "1234567890ca",
+        "publish_time": "2017-04-28T18:43:45+09:00",
+        "publisher": {
+            "name": "test21",
+            "url": "http://yahoo.co.jp",
+            "icon": "http://192.168.91.197:3000/funimg/einstein01.jpeg"
+        },
+        "content": "test comment 21",
+        "child": null
+    }
+];
 
 function loadComment() {
     $('#right_block').empty();
 
-    var $div_comment_a = $('<div>',
+    comments = jQuery.parseJSON(json_js_comment);
+    for (c in comments) {
+        var $div_comment_set = $('<div>',
         {
-            "class": "comment_a"
+            "class": "comment_set"
         });
 
-    $div_comment_a.append('first comment');
+        var $div_comment = $('<div>',
+        {
+            "class": "comment"
+        });
 
-    $('#right_block').append($div_comment_a);
+        var $div_comment_left = $('<div>',
+        {
+            "class": "comment_left",
+            html: '<a href="' + c["publisher"]["url"] + '">' +
+                    '<img src="' + c["publisher"]["icon"] + '" width="30" height="30" alt="funpis" title="funpis" />' +
+                  '</a>'
+        });
+        $div_comment.append($div_comment_left);
+
+        var $div_comment_right = $('<div>',
+        {
+            "class": "comment_right"
+        });
+
+        var $div_comment_right_top = $('<div>',
+        {
+            "class": "comment_right_top"
+        });
+        var $div_comment_right_top_name = $('<div>',
+        {
+            "class": "comment_right_item",
+            html: '<a href="' + c["publisher"]["url"] + '">' + c["publisher"]["name"] + '</a>'
+        });
+        $div_comment_right_top.append($div_comment_right_top_name);
+        var $div_comment_right_top_space = $('<div>',
+        {
+            "class": "comment_right_item",
+            html: '&nbsp;&nbsp;&nbsp;'
+        });
+        $div_comment_right_top.append($div_comment_right_top_space);
+        var $div_comment_right_top_time = $('<div>',
+        {
+            "class": "comment_right_item",
+            html: c["publish_time"]
+        });
+        $div_comment_right_top.append($div_comment_right_top_time);
+
+        var $div_comment_right_main = $('<div>',
+        {
+            "class": "comment_right_main",
+            html: c["content"]
+        });
+        $div_comment_right.append($div_comment_right_top);
+        $div_comment_right.append($div_comment_right_main);
+        $div_comment.append($div_comment_right);
+
+        $div_comment_set.append($div_comment);
+
+        $('#right_block').append($div_comment_set);
+    }
+
+
 
 /*
     $('#panel').append('<div style="width:100%; height:100px;"></div>');

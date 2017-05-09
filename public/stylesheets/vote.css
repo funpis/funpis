@@ -280,7 +280,7 @@
 }
 
 #right_block>div>div>div.comment_left {
-    width: 30px;
+    width: 50px;
     margin: 0;
     padding: 0;
     border: 0;
@@ -297,7 +297,7 @@
 }
 
 #right_block>div>div>div.comment_indent {
-    width: 30px;
+    width: 50px;
     margin: 0;
     padding: 0;
     border: 0;
@@ -365,4 +365,9 @@
     background-color: white;
     border-collapse:collapse;
     position: relative;
+}
+
+img{
+    max-width: 100%;
+    max-height: 100%;
 }

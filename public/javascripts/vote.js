@@ -556,7 +556,8 @@ var json_js_comment = [
                 "url": "http://yahoo.co.jp",
                 "icon": "http://192.168.91.197:3000/funimg/einstein01.jpeg"
                 },
-            "content": "test comment 2"
+            "content": "test comment 2<br>" +
+                       "<img src='http://192.168.91.197:3000/funimg/zhen.jpg'/>",
             },
             {
             "comment_id": "1234567890ac",
@@ -600,7 +601,10 @@ var json_js_comment = [
             "url": "http://yahoo.co.jp",
             "icon": "http://192.168.91.197:3000/funimg/einstein01.jpeg"
         },
-        "content": "test comment 21",
+        "content": "test comment 21<br>" +
+                   "<img src='http://192.168.91.197:3000/funimg/beijing.jpg'/><br>" +
+                   "<img src='http://192.168.91.197:3000/funimg/weiqu.jpg'/><br>" +
+                   "<img src='http://192.168.91.197:3000/funimg/29.gif'/>",
         "child": null
     }
 ];
@@ -627,7 +631,7 @@ function loadComment() {
         {
             "class": "comment_left",
             html: '<a href="' + c["publisher"]["url"] + '">' +
-                    '<img src="' + c["publisher"]["icon"] + '" width="30" height="30" alt="funpis" title="funpis" />' +
+                    '<img src="' + c["publisher"]["icon"] + '" width="40px" height="40px" alt="funpis" title="funpis" />' +
                   '</a>'
         });
         $div_comment.append($div_comment_left);
@@ -670,6 +674,71 @@ function loadComment() {
         $div_comment.append($div_comment_right);
 
         $div_comment_set.append($div_comment);
+
+        for (var j = 0; c["child"] && j < c["child"].length; j++) {
+            var child = c["child"][j];
+
+            var $div_child_comment = $('<div>',
+            {
+                "class": "comment"
+            });
+
+            var $div_child_comment_indent = $('<div>',
+            {
+                "class": "comment_indent",
+                html: '&nbsp;&nbsp;&nbsp;'
+            });
+            $div_child_comment.append($div_child_comment_indent);
+
+            var $div_child_comment_left = $('<div>',
+            {
+                "class": "comment_left",
+                html: '<a href="' + child["publisher"]["url"] + '">' +
+                        '<img src="' + child["publisher"]["icon"] + '" width="40px" height="40px" alt="funpis" title="funpis" />' +
+                      '</a>'
+            });
+            $div_child_comment.append($div_child_comment_left);
+
+            var $div_child_comment_right = $('<div>',
+            {
+                "class": "comment_right"
+            });
+
+            var $div_child_comment_right_top = $('<div>',
+            {
+                "class": "comment_right_top"
+            });
+            var $div_child_comment_right_top_name = $('<div>',
+            {
+                "class": "comment_right_item",
+                html: '<a href="' + child["publisher"]["url"] + '">' + child["publisher"]["name"] + '</a>'
+            });
+            $div_child_comment_right_top.append($div_child_comment_right_top_name);
+            var $div_child_comment_right_top_space = $('<div>',
+            {
+                "class": "comment_right_item",
+                html: '&nbsp;&nbsp;&nbsp;'
+            });
+            $div_child_comment_right_top.append($div_child_comment_right_top_space);
+            var $div_child_comment_right_top_time = $('<div>',
+            {
+                "class": "comment_right_item",
+                html: child["publish_time"]
+            });
+            $div_child_comment_right_top.append($div_child_comment_right_top_time);
+
+            var $div_child_comment_right_main = $('<div>',
+            {
+                "class": "comment_right_main",
+                html: child["content"]
+            });
+            $div_child_comment_right.append($div_child_comment_right_top);
+            $div_child_comment_right.append($div_child_comment_right_main);
+            $div_child_comment.append($div_child_comment_right);
+
+            $div_comment_set.append($div_child_comment);
+
+        }
 
         $('#right_block').append($div_comment_set);
     }

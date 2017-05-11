@@ -233,7 +233,7 @@ function loadTopic() {
     var $div_title = $('<div>',
     {
         "class": "topic_title",
-        "html": '<span style="font-size:1.5em;">abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ<span>'
+        "html": '<span style="font-size:1.2em;">abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ<span>'
     });
     $div_topic.append($div_title);
 
@@ -344,12 +344,12 @@ function loadTopic() {
         '<col style="width:20%;">' +
         '<col style="width:80%;">' +
         '</colgroup>' +
-        '<tr>' +
+        '<tr onclick="alert(333);">' +
         '<td valign="top">' + 'Red :' + '</td>' +
         '<td valign="top">' + '中国からインターネット経由で日本の通販サイトなどで買い物をした金額が、２０１６年に初めて１兆円を突破したことが経済産業省の調査でわかった。' + '</td>' +
         '</tr>' +
-        '<tr>' +
-        '<td valign="top">' + 'Blue :' + '</td>' +
+        '<tr onclick="alert(444);">' +
+        '<td valign="top">' + 'BlueBlueBlueBlueBlueBlueBlue :' + '</td>' +
         '<td valign="top">' + 'BlueBlueBlue' + '</td>' +
         '</tr>' +
         '<tr>' +
@@ -557,7 +557,7 @@ var json_js_comment = [
                 "icon": "http://192.168.91.197:3000/funimg/einstein01.jpeg"
                 },
             "content": "test comment 2<br>" +
-                       "<img src='http://192.168.91.197:3000/funimg/zhen.jpg'/>",
+                       "<img src='http://192.168.91.197:3000/funimg/zhen.jpg'/>"
             },
             {
             "comment_id": "1234567890ac",
@@ -589,7 +589,8 @@ var json_js_comment = [
                 "url": "http://yahoo.co.jp",
                 "icon": "http://192.168.91.197:3000/funimg/einstein01.jpeg"
                 },
-            "content": "test comment 12"
+            "content": "test comment 12<br>" +
+                       "<img src='http://192.168.91.197:3000/funimg/zhen.jpg'/>"
             }
         ]
     },
@@ -685,8 +686,7 @@ function loadComment() {
 
             var $div_child_comment_indent = $('<div>',
             {
-                "class": "comment_indent",
-                html: '&nbsp;&nbsp;&nbsp;'
+                "class": "comment_indent"
             });
             $div_child_comment.append($div_child_comment_indent);
 
@@ -706,7 +706,7 @@ function loadComment() {
 
             var $div_child_comment_right_top = $('<div>',
             {
-                "class": "comment_right_top"
+                "class": "comment_right_top",
             });
             var $div_child_comment_right_top_name = $('<div>',
             {

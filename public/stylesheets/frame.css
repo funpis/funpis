@@ -139,9 +139,6 @@ div.div_column_tab_on {
 article {
     width: 100%;
     flex: 1;
-    /*
-    overflow: auto;
-    */
     overflow: hidden;
     position: relative;
     background-color: white;
@@ -348,3 +345,7 @@ div.div_account_button_on {
     background-color: grey; 
 }
 
+a {
+    text-decoration: none;
+    cursor: pointer;
+}

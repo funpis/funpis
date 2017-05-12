@@ -36,6 +36,11 @@ router.get('/v/:vid', function(req, res, next) {
   res.render('getvote', {title: 'VoteRun', user: req.user, vid: req.params.vid});
 });
 
+/* GET new vote page. */
+router.get('/new', function(req, res, next) {
+  res.render('new_vote', {title: 'VoteRun', user: req.user});
+});
+
 /*
 router.get('/', function(req, res) {
 	res.render('index', { user: req.user });

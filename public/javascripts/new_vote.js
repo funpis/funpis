@@ -1,40 +1,9 @@
 $(document).ready(function() {
-    $('#right_block').bottom({proximity: 0.02});
-    $('#right_block').bind('bottom', function() {
-        var obj = $(this);
-        if (!obj.data('loading')) {
-            obj.data('loading', true);
-
-            $('#right_block').append('<div class="loading"><p>Loading comments...</p></div>');
-
-            setTimeout(function() {
-                $('#right_block>div.loading').remove();
-
-                //downloadPics();
-
-                obj.data('loading', false);
-            }, 1000);
-        }
-    });
-    $('html,body').animate({scrollTop: 0}, '1');
-
     showHeader();
     showTabColumn();
 
-    loadTopic();
-
-    loadComment();
-
-    adjustHeight();
+    loadAddVote();
 });
-
-function adjustHeight(){
-    var hsize = $(document).height() - 100;
-    $("#left_block").height(hsize);
-    $("#right_block").height(hsize);
-}
-
-$(window).resize(adjustHeight);
 
 function showHeader() {
     var $div_header_logo = $('<div>',
@@ -242,19 +211,18 @@ function loadTopic() {
             "class": "topic_head"
         });
 
-    $div_topic_head.append('<div class="topic_head_publisher">' + '@liupeng 3hours' + '</div>');
+    $div_topic_head.append('<div class="topic_head_publisher">Run by ' + '@liupeng' + '</div>');
 
-    var expire_time = moment("2017-05-12T18:00:00+09:00", "YYYY-MM-DDThh:mm:ssZ")
     var $div_countdown = $('<div class="topic_head_countdown"></div>')
-        .countdown(expire_time.toDate(), {elapse: false})
+        .countdown('2018/02/21 14:13:00', {elapse: false})
         .on('update.countdown', function(event) {
             var totalHours = event.offset.totalDays * 24 + event.offset.hours + 'h';
             if (totalHours < 1) {
-                $(this).html('<font color="red">' + 
+                $(this).html('<font color="red">Left ' + 
                              event.strftime(totalHours + ':%Mm:%Ss') +
                              '</font>');
             } else {
-                $(this).html('<font color="black">' + 
+                $(this).html('<font color="black">Left ' + 
                              event.strftime(totalHours + ':%Mm:%Ss') +
                              '</font>');
             }
@@ -507,58 +475,22 @@ var picUrl = [
 var json_topic = {
     "id": "123456789012",
     "title": "test topic",
-    "publish_time": "2017/02/21T20:20:00+09:00",
-    "expire_time": "2018/02/21T20:20:00+09:00",
-    "publisher": {
+    "author": {
         "name": "liupeng",
-        "url": "http://yahoo.co.jp",
-        "icon": "http://192.168.91.197:3000/funimg/einstein01.jpeg"
+        "url": "http://google.com"
     },
-    "chart": {
-        "type": "bar",
-        "data": '{\
-            "labels": ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],\
-            "datasets": [{\
-                "label": "# of Votes",\
-                "data": [12, 19, 3, 5, 2, 3],\
-                "backgroundColor": [\
-                    "rgba(255, 99, 132, 0.2)",\
-                    "rgba(54, 162, 235, 0.2)",\
-                    "rgba(255, 206, 86, 0.2)",\
-                    "rgba(75, 192, 192, 0.2)",\
-                    "rgba(153, 102, 255, 0.2)",\
-                    "rgba(255, 159, 64, 0.2)"\
-                ],\
-                "borderColor": [\
-                    "rgba(255,99,132,1)",\
-                    "rgba(54, 162, 235, 1)",\
-                    "rgba(255, 206, 86, 1)",\
-                    "rgba(75, 192, 192, 1)",\
-                    "rgba(153, 102, 255, 1)",\
-                    "rgba(255, 159, 64, 1)"\
-                ],\
-                "borderWidth": 1\
-            }]\
-        }',
-        "options": '{\
-            "scales": {\
-                "yAxes": [{\
-                    "ticks": {\
-                        "beginAtZero":true\
-                    }\
-                }]\
-            },\
-            "legend": {\
-                "display": false,\
-                "position": "right"\
-            },\
-            "title": {\
-                "display": true,\
-                "text": "test vote",\
-                "fontSize": 18\
-            }\
-        }'
-    }
+    "expire_time": "2018/02/21 14:13:00",
+    "publisher": {
+        "name": "yahoo",
+        "time": "2017/02/21 14:13:00"
+    },
+    "paragraph": [
+        {
+            "id": "1234567890a",
+            "type": "text",
+            "url": "",
+        }
+    ]
 };
 
 var json_db_comment = {
@@ -583,8 +515,6 @@ var json_js_comment = [
             "url": "http://yahoo.co.jp",
             "icon": "http://192.168.91.197:3000/funimg/einstein01.jpeg"
         },
-        "good": 100,
-        "bad": 50,
         "content": "test comment 1",
         "child": [
             {
@@ -595,8 +525,6 @@ var json_js_comment = [
                 "url": "http://yahoo.co.jp",
                 "icon": "http://192.168.91.197:3000/funimg/einstein01.jpeg"
                 },
-            "good": 76100,
-            "bad": 5034,
             "content": "test comment 2<br>" +
                        "<img src='http://192.168.91.197:3000/funimg/zhen.jpg'/>"
             },
@@ -608,8 +536,6 @@ var json_js_comment = [
                 "url": "http://yahoo.co.jp",
                 "icon": "http://192.168.91.197:3000/funimg/einstein01.jpeg"
                 },
-            "good": 3100,
-            "bad": 3450,
             "content": "test comment 3"
             }
         ]
@@ -622,8 +548,6 @@ var json_js_comment = [
             "url": "http://yahoo.co.jp",
             "icon": "http://192.168.91.197:3000/funimg/einstein01.jpeg"
         },
-        "good": 154600,
-        "bad": 5,
         "content": "test comment 11",
         "child": [
             {
@@ -634,8 +558,6 @@ var json_js_comment = [
                 "url": "http://yahoo.co.jp",
                 "icon": "http://192.168.91.197:3000/funimg/einstein01.jpeg"
                 },
-            "good": 13200,
-            "bad": 5420,
             "content": "test comment 12<br>" +
                        "<img src='http://192.168.91.197:3000/funimg/zhen.jpg'/>"
             }
@@ -649,8 +571,6 @@ var json_js_comment = [
             "url": "http://yahoo.co.jp",
             "icon": "http://192.168.91.197:3000/funimg/einstein01.jpeg"
         },
-        "good": 1230,
-        "bad": 232,
         "content": "test comment 21<br>" +
                    "<img src='http://192.168.91.197:3000/funimg/beijing.jpg'/><br>" +
                    "<img src='http://192.168.91.197:3000/funimg/weiqu.jpg'/><br>" +
@@ -658,43 +578,6 @@ var json_js_comment = [
         "child": null
     }
 ];
-
-function calTimeLag(fromTime) {
-    var from_time = moment(fromTime, "YYYY-MM-DDThh:mm:ssZ");
-    var now = moment.utc();
-
-    var years = now.diff(fromTime, "years");
-    if (years >= 1) {
-        return (years + " years");
-    }
-
-    var months = now.diff(fromTime, "months");
-    if (months >= 1) {
-        return (months + " months");
-    }
-
-    var days = now.diff(fromTime, "days");
-    if (days >= 1) {
-        return (days + " days");
-    }
-
-    var hours = now.diff(fromTime, "hours");
-    if (hours >= 1) {
-        return (hours + " hours");
-    }
-
-    var minutes = now.diff(fromTime, "minutes");
-    if (minutes >= 1) {
-        return (minutes + " minutes");
-    }
-
-    var seconds = now.diff(fromTime, "seconds");
-    if (seconds >= 1) {
-        return (seconds + " seconds");
-    }
-
-    return fromTime;
-}
 
 function loadComment() {
     $('#right_block').empty();
@@ -738,43 +621,18 @@ function loadComment() {
             html: '<a href="' + c["publisher"]["url"] + '">' + c["publisher"]["name"] + '</a>'
         });
         $div_comment_right_top.append($div_comment_right_top_name);
-        var $div_comment_right_top_space1 = $('<div>',
+        var $div_comment_right_top_space = $('<div>',
         {
-            "class": "comment_right_space"
+            "class": "comment_right_item",
+            html: '&nbsp;&nbsp;&nbsp;'
         });
-        $div_comment_right_top.append($div_comment_right_top_space1);
+        $div_comment_right_top.append($div_comment_right_top_space);
         var $div_comment_right_top_time = $('<div>',
         {
             "class": "comment_right_item",
-            html: calTimeLag(c["publish_time"])
+            html: c["publish_time"]
         });
         $div_comment_right_top.append($div_comment_right_top_time);
-        var $div_comment_right_top_space2 = $('<div>',
-        {
-            "class": "comment_right_space"
-        });
-        $div_comment_right_top.append($div_comment_right_top_space2);
-        var $div_comment_right_top_good = $('<div>',
-        {
-            "class": "comment_right_item",
-            html: '<a href="#" onclick="alert(777)">' +
-                    '<img src="http://192.168.91.197:3000/images/good.png" width="20px" height="20px" />' + c["good"] +
-                  '</a>'
-        });
-        $div_comment_right_top.append($div_comment_right_top_good);
-        var $div_comment_right_top_space3 = $('<div>',
-        {
-            "class": "comment_right_space"
-        });
-        $div_comment_right_top.append($div_comment_right_top_space3);
-        var $div_comment_right_top_bad = $('<div>',
-        {
-            "class": "comment_right_item",
-            html: '<a href="#" onclick="alert(888)">' +
-                    '<img src="http://192.168.91.197:3000/images/bad.png" width="20px" height="20px" />' + c["bad"] +
-                  '</a>'
-        });
-        $div_comment_right_top.append($div_comment_right_top_bad);
 
         var $div_comment_right_main = $('<div>',
         {
@@ -825,43 +683,18 @@ function loadComment() {
                 html: '<a href="' + child["publisher"]["url"] + '">' + child["publisher"]["name"] + '</a>'
             });
             $div_child_comment_right_top.append($div_child_comment_right_top_name);
-            var $div_child_comment_right_top_space1 = $('<div>',
+            var $div_child_comment_right_top_space = $('<div>',
             {
-                "class": "comment_right_space"
+                "class": "comment_right_item",
+                html: '&nbsp;&nbsp;&nbsp;'
             });
-            $div_child_comment_right_top.append($div_child_comment_right_top_space1);
+            $div_child_comment_right_top.append($div_child_comment_right_top_space);
             var $div_child_comment_right_top_time = $('<div>',
             {
                 "class": "comment_right_item",
-                html: calTimeLag(child["publish_time"])
+                html: child["publish_time"]
             });
             $div_child_comment_right_top.append($div_child_comment_right_top_time);
-            var $div_child_comment_right_top_space2 = $('<div>',
-            {
-                "class": "comment_right_space"
-            });
-            $div_child_comment_right_top.append($div_child_comment_right_top_space2);
-            var $div_comment_right_top_good = $('<div>',
-            {
-                "class": "comment_right_item",
-                html: '<a href="#" onclick="alert(777)">' +
-                        '<img src="http://192.168.91.197:3000/images/good.png" width="20px" height="20px" />' + child["good"] +
-                      '</a>'
-            });
-            $div_child_comment_right_top.append($div_comment_right_top_good);
-            var $div_child_comment_right_top_space3 = $('<div>',
-            {
-                "class": "comment_right_space"
-            });
-            $div_child_comment_right_top.append($div_child_comment_right_top_space3);
-            var $div_comment_right_top_bad = $('<div>',
-            {
-                "class": "comment_right_item",
-                html: '<a href="#" onclick="alert(888)">' +
-                        '<img src="http://192.168.91.197:3000/images/bad.png" width="20px" height="20px" />' + child["bad"] +
-                      '</a>'
-            });
-            $div_child_comment_right_top.append($div_comment_right_top_bad);
 
             var $div_child_comment_right_main = $('<div>',
             {

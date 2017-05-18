@@ -1,11 +1,15 @@
 var express = require('express');
 var passport = require('passport');
 var Account = require('../mongo').Account;
+var Vote = require('../mongo').Vote;
+var VoteMenu = require('../mongo').VoteMenu;
+var VoteOption = require('../mongo').VoteOption;
+var VoteComment = require('../mongo').VoteComment;
 var router = express.Router();
 var util = require('util');
 
-/* calculate a vote id */
-function make_vote_id() {
+/* calculate a 12 length id */
+function make_12_id() {
 	var chars = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	var cl = chars.length;
 	var r = "";
@@ -86,6 +90,16 @@ router.get('/logout', function(req, res) {
 
 router.get('/ping', function(req, res) {
 	res.status(200).send('pong!');
+});
+
+router.post('/vote', function(req, res) {
+    var v = new Vote();
+    var vm = new VoteMenu();
+    var vo = new VoteOption();
+
+    v.vote_id = make_12_id();
+    v.vote_title = req.body.title;
+
 });
 
 module.exports = router;

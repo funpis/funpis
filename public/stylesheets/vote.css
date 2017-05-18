@@ -36,7 +36,7 @@
 }
 
 #left_block>div>div.topic_head {
-    width: 100%;
+    width: 98%;
     height: 20px;
     margin-top: 2px;
     padding: 0;
@@ -64,7 +64,7 @@
 }
 
 #left_block>div>div.topic_title {
-    width: 100%;
+    width: 98%;
     height: 30px;
     margin-top: 0;
     padding: 0;
@@ -83,10 +83,12 @@
 }
 
 #left_block>div>div.vote_graph_legend {
-    width: 100%;
+    width: 98%;
+    /*
     min-height: 40px;
     max-height: 400px;
-    overflow: auto;
+    */
+    overflow: none;
 }
 
 #left_block>div>div.topic_title span {
@@ -101,7 +103,7 @@
 }
 
 #left_block>div>div.topic_foot {
-    width: 100%;
+    width: 98%;
     height: 32px;
     margin-top: 2px;
     padding: 0;
@@ -138,7 +140,7 @@
 }
 
 #left_block>div>div.vote_topic {
-    width: 100%;
+    width: 98%;
     margin-top: 5px;
     padding: 0;
     border: 0;

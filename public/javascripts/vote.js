@@ -242,9 +242,11 @@ function loadTopic() {
             "class": "topic_head"
         });
 
-    $div_topic_head.append('<div class="topic_head_publisher">' + '@liupeng 3hours' + '</div>');
+    var publish_time = calTimeLag(json_js_vote_graph["publish_time"]);
 
-    var expire_time = moment("2017-05-12T18:00:00+09:00", "YYYY-MM-DDThh:mm:ssZ")
+    $div_topic_head.append('<div class="topic_head_publisher">' + '@liupeng ' + publish_time + '</div>');
+
+    var expire_time = moment(json_js_vote_graph["expire_time"], "YYYY-MM-DDThh:mm:ssZ")
     var $div_countdown = $('<div class="topic_head_countdown"></div>')
         .countdown(expire_time.toDate(), {elapse: false})
         .on('update.countdown', function(event) {
@@ -275,7 +277,7 @@ function loadTopic() {
     var chart_data = '{\
         "labels": ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],\
         "datasets": [{\
-            "label": "# of Votes",\
+            "label": "ticket count",\
             "data": [12, 19, 3, 5, 2, 3],\
             "backgroundColor": [\
                 "rgba(255, 99, 132, 0.2)",\
@@ -347,11 +349,11 @@ function loadTopic() {
         '</colgroup>' +
         '<tr onclick="alert(333);">' +
         '<td valign="top">' + 'Red :' + '</td>' +
-        '<td valign="top">' + '中国からインターネット経由で日本の通販サイトなどで買い物をした金額が、２０１６年に初めて１兆円を突破したことが経済産業省の調査でわかった。' + '</td>' +
+        '<td valign="top">' + '中国からインターネット経由で日本の通販サイトなどで買い物をした金額が、２０１６年に初めて１兆円を突破したことが経済産業省の調査でわかった。<br>123 5%' + '</td>' +
         '</tr>' +
         '<tr onclick="alert(444);">' +
         '<td valign="top">' + 'BlueBlueBlueBlueBlueBlueBlue :' + '</td>' +
-        '<td valign="top">' + 'BlueBlueBlue' + '</td>' +
+        '<td valign="top">' + 'BlueBlueBlue<br><img src="http://192.168.91.197:3000/funimg/beijing.jpg"/>' + '</td>' +
         '</tr>' +
         '<tr>' +
         '<td valign="top">' + 'Yellow :' + '</td>' +
@@ -504,11 +506,12 @@ var picUrl = [
     "http://192.168.91.197:3000/funimg/beijing.jpg",
 ];
 
-var json_topic = {
-    "id": "123456789012",
+var json_js_vote_graph = {
+    "vote_id": "vote12345678",
+    "graph_id": "123456789012",
     "title": "test topic",
-    "publish_time": "2017/02/21T20:20:00+09:00",
-    "expire_time": "2018/02/21T20:20:00+09:00",
+    "publish_time": "2017-02-21T20:20:00Z",
+    "expire_time": "2018-02-21T20:20:00Z",
     "publisher": {
         "name": "liupeng",
         "url": "http://yahoo.co.jp",
@@ -519,7 +522,7 @@ var json_topic = {
         "data": '{\
             "labels": ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],\
             "datasets": [{\
-                "label": "# of Votes",\
+                "label": "ticket count",\
                 "data": [12, 19, 3, 5, 2, 3],\
                 "backgroundColor": [\
                     "rgba(255, 99, 132, 0.2)",\
@@ -542,6 +545,9 @@ var json_topic = {
         }',
         "options": '{\
             "scales": {\
+                "xAxes": [{\
+                    "position": "bottom",\
+                }],\
                 "yAxes": [{\
                     "ticks": {\
                         "beginAtZero":true\
@@ -561,10 +567,41 @@ var json_topic = {
     }
 };
 
+var json_js_vote_menu = {
+    "vote_id": "vote12345678",
+    "shoot": 222,
+    "quote": 333,
+    "watch": 444
+};
+
+var json_js_vote_option = {
+    "vote_id": "vote12345678",
+    "options": [
+        {
+            "name": "Red",
+            "count": 123,
+            "percent": 5,
+            "note": "abcdRed<br><img src='http://192.168.91.197:3000/funimg/beijing.jpg'/>"
+        },
+        {
+            "name": "BlueBlueBlueBlueBlueBlueBlue",
+            "count": 32,
+            "percent": 7,
+            "note": "中国からインターネット経由で日本の通販サイトなどで買い物をした金額が、２０１６年に初めて１兆円を突破したことが経済産業省の調査でわかった。"
+        }
+    ]    
+};
+
+var json_js_vote_topic = {
+    "vote_id": "vote12345678",
+    "title": "vote topic title",
+    "content": "aaa<br>bbb<br>ccc<br>ddd"
+};
+
 var json_db_comment = {
     "comment_id": "1234567890ab",
     "vote_id": "123456789012",
-    "publish_time": "2017-04-28T18:43:45+09:00",
+    "publish_time": "2017-04-28T18:43:45Z",
     "publisher": {
         "name": "test01",
         "url": "http://yahoo.co.jp",
@@ -577,7 +614,7 @@ var json_db_comment = {
 var json_js_comment = [
     {
         "comment_id": "1234567890aa",
-        "publish_time": "2017-04-28T18:43:45+09:00",
+        "publish_time": "2017-04-28T18:43:45Z",
         "publisher": {
             "name": "test01",
             "url": "http://yahoo.co.jp",
@@ -589,7 +626,7 @@ var json_js_comment = [
         "child": [
             {
             "comment_id": "1234567890ab",
-            "publish_time": "2017-04-28T18:43:45+09:00",
+            "publish_time": "2017-04-28T18:43:45Z",
             "publisher": {
                 "name": "test02",
                 "url": "http://yahoo.co.jp",
@@ -602,7 +639,7 @@ var json_js_comment = [
             },
             {
             "comment_id": "1234567890ac",
-            "publish_time": "2017-04-28T18:43:45+09:00",
+            "publish_time": "2017-04-28T18:43:45Z",
             "publisher": {
                 "name": "test03",
                 "url": "http://yahoo.co.jp",
@@ -616,7 +653,7 @@ var json_js_comment = [
     },
     {
         "comment_id": "1234567890ba",
-        "publish_time": "2017-04-28T18:43:45+09:00",
+        "publish_time": "2017-04-28T18:43:45Z",
         "publisher": {
             "name": "test11",
             "url": "http://yahoo.co.jp",
@@ -628,7 +665,7 @@ var json_js_comment = [
         "child": [
             {
             "comment_id": "1234567890ac",
-            "publish_time": "2017-04-28T18:43:45+09:00",
+            "publish_time": "2017-04-28T18:43:45Z",
             "publisher": {
                 "name": "test12",
                 "url": "http://yahoo.co.jp",
@@ -643,7 +680,7 @@ var json_js_comment = [
     },
     {
         "comment_id": "1234567890ca",
-        "publish_time": "2017-04-28T18:43:45+09:00",
+        "publish_time": "2017-04-28T18:43:45Z",
         "publisher": {
             "name": "test21",
             "url": "http://yahoo.co.jp",
@@ -665,32 +702,32 @@ function calTimeLag(fromTime) {
 
     var years = now.diff(fromTime, "years");
     if (years >= 1) {
-        return (years + " years");
+        return (years + "years");
     }
 
     var months = now.diff(fromTime, "months");
     if (months >= 1) {
-        return (months + " months");
+        return (months + "months");
     }
 
     var days = now.diff(fromTime, "days");
     if (days >= 1) {
-        return (days + " days");
+        return (days + "days");
     }
 
     var hours = now.diff(fromTime, "hours");
     if (hours >= 1) {
-        return (hours + " hours");
+        return (hours + "hours");
     }
 
     var minutes = now.diff(fromTime, "minutes");
     if (minutes >= 1) {
-        return (minutes + " minutes");
+        return (minutes + "minutes");
     }
 
     var seconds = now.diff(fromTime, "seconds");
     if (seconds >= 1) {
-        return (seconds + " seconds");
+        return (seconds + "seconds");
     }
 
     return fromTime;

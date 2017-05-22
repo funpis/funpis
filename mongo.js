@@ -1,23 +1,26 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var passportLocalMongoose = require('passport-local-mongoose');
+//var passportLocalMongoose = require('passport-local-mongoose');
 
 var Account = new Schema({
-    username: {type: String, required: true},
+    user_id: {type: String, required: true, unique: true},
+    username: {type: String, required: true, unique: true},
     password: {type: String, required: true},
     email: {type: String, required: true},
-    url: {type: String, required: true},
 });
 
 var Vote = new Schema({
-    vote_id: {type: String, required: true},
+    vote_id: {type: String, required: true, unique: true},
     vote_title: {type: String, required: true},
-	publisher_id: {type: String, required: true},
-	publish_time: {type: Date, dafault: Date.now},
-	expire_time: {type: Date, dafault: Date.now},
+    publisher_id: {type: String, required: true},
+    publish_time: {type: Date, dafault: Date.now},
+    expire_time: {type: Date, dafault: Date.now},
     chart_type: {type: String, required: true},
-	topic_title: {type: String},
-	topic_content: {type: String},
+    topic_title: {type: String},
+    topic_content: {type: String},
+    anonymous_publish: {type: Boolean, required:true},
+    anonymous_ticket: {type: Boolean, required:true},
+    anonymous_comment: {type: Boolean, required:true},
 });
 
 var VoteMenu = new Schema({
@@ -33,16 +36,16 @@ var VoteComment = new Schema({
     vote_id: {type: String, required: true},
     comment_id: {type: String, required: true},
     parent_id: {type: String},
-	publisher_id: {type: String, required: true},
-	publish_time: {type: Date, dafault: Date.now},
+    publisher_id: {type: String, required: true},
+    publish_time: {type: Date, dafault: Date.now},
     content: {type: String, required: true},
     good: {type: Number, default: 0},
     bad: {type: Number, default: 0},
 });
 
 var VoteOption = new Schema({
-	vote_id: {type: String, required: true},
-	sequence: {type: Array, default: []},
+    vote_id: {type: String, required: true},
+    sequence: {type: Array, default: []},
     name_0: {type: String},
     count_0: {type: Number},
     color_0: {type: Array},
@@ -255,7 +258,7 @@ var VoteOption = new Schema({
     count_99: {type: Number},
 });
 
-Account.plugin(passportLocalMongoose);
+//Account.plugin(passportLocalMongoose);
 
 module.exports = {
   Account: mongoose.model('Account', Account),

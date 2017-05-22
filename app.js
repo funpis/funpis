@@ -37,14 +37,17 @@ app.use(passport.session());
 app.use('/', index);
 app.use('/users', users);
 
+/*
 // passport config
 var Account = require('./mongo').Account;
 passport.use(new LocalStrategy(Account.authenticate()));
 passport.serializeUser(Account.serializeUser());
 passport.deserializeUser(Account.deserializeUser());
+*/
 
 // mongoose
-mongoose.connect('mongodb://localhost/funpis');
+mongoose.Promise = require('bluebird');
+mongoose.connect('mongodb://localhost/voterun');
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

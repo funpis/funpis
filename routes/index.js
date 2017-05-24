@@ -23,27 +23,91 @@ function make_12_id() {
 }
 
 function read_vote_from_db(vid) {
+	var vote = {};
 
+    Vote.findOne({'vote_id': vid}).exec(function(err, v) {
+        if (err || !v) {
+            console.error(err.stack);
+            return res.status(500).send('get vote error');
+        }
+        console.log('v: ', v);
+
+	    VoteMenu.findOne({'vote_id': vid}).exec(function(err, vm) {
+	        if (err || !vm) {
+	            console.error(err.stack);
+	            return res.status(500).send('get votemenu error');
+	        }
+            console.log('vm: ', vm);
+
+		    VoteOption.findOne({'vote_id': vid}).exec(function(err, vo) {
+		        if (err || !vo) {
+		            console.error(err.stack);
+		            return res.status(500).send('get voteoption error');
+		        }
+                console.log('vo: ', vo);
+
+	            vote.vote = v;
+	            vote.votemenu = vm;
+			    vote.voteoption = vo;
+
+	            return vote;
+		    });
+	    });
+    });
 }
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', {title: 'FunPis', user: req.user});
+    res.render('index', {title: 'FunPis', user: req.user});
 });
 
 /* GET vote page. */
 router.get('/vote', function(req, res, next) {
-  res.render('vote', {title: 'VoteRun', user: req.user});
+    res.render('vote', {title: 'VoteRun', user: req.user});
 });
 
 /* GET vote page by a vote id. */
 router.get('/v/:vid', function(req, res, next) {
-  res.render('getvote', {title: 'VoteRun', user: req.user, vid: req.params.vid});
+    console.log('vote_id=', req.params.vid);
+    var vid = req.params.vid;
+    //var vote = read_vote_from_db(req.params.vid);
+    //console.log('vote: ', vote);
+    //res.render('getvote', {title: 'VoteRun', u: req.user, v: vote});
+    Vote.findOne({'vote_id': vid}).exec(function(err, v) {
+        if (err || !v) {
+            console.error(err.stack);
+            return res.status(500).send('get vote error');
+        }
+        console.log('v.vote_id: ', v.vote_id);
+
+	    VoteMenu.findOne({'vote_id': vid}).exec(function(err, vm) {
+	        if (err || !vm) {
+	            console.error(err.stack);
+	            return res.status(500).send('get votemenu error');
+	        }
+            console.log('vm.vote_id: ', vm.vote_id);
+
+		    VoteOption.findOne({'vote_id': vid}).exec(function(err, vo) {
+		        if (err || !vo) {
+		            console.error(err.stack);
+		            return res.status(500).send('get voteoption error');
+		        }
+                console.log('vo.vote_id: ', vo.vote_id);
+
+                var vote = {};
+	            vote.vote = v;
+	            vote.votemenu = vm;
+			    vote.voteoption = vo;
+
+                return res.render('getvote', {title: 'VoteRun', u: req.user, v: JSON.stringify(vote)});
+		    });
+	    });
+    });
 });
 
 /* GET new vote page. */
 router.get('/new', function(req, res, next) {
-  res.render('new_vote', {title: 'VoteRun', user: req.user});
+    res.render('new_vote', {title: 'VoteRun', user: req.user});
 });
 
 /*
@@ -106,9 +170,9 @@ router.post('/add_user', function(req, res) {
     a.save(function(err) {
         if (err) {
             console.error(err.stack);
-            res.status(500).send('add user error');
+            return res.status(500).send('add user error');
         } else {
-            res.status(200).json({ message: 'User created! uid=' + a.user_id});
+            return res.status(200).json({ message: 'User created! uid=' + a.user_id});
         }
     });
 });

@@ -6,20 +6,21 @@ html
     meta(http-equiv='X-UA-Compatible', content='IE=edge')
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     link(type='text/css', rel='stylesheet', href='/stylesheets/frame.css')
-    link(type='text/css', rel='stylesheet', href='/stylesheets/vote.css')
-    script(type='text/javascript' src='javascripts/jquery-1.12.4.min.js')
-    script(type='text/javascript' src='javascripts/jquery.bottom-1.0.js')
-    script(type='text/javascript' src='javascripts/jquery.countdown.min.js')
-    script(type='text/javascript' src='javascripts/moment-with-locales.min.js')
-    script(type='text/javascript' src='javascripts/Chart.min.js')
-    script(type='text/javascript' src='javascripts/vote.js')
+    link(type='text/css', rel='stylesheet', href='/stylesheets/getvote.css')
+    script(type='text/javascript' src='/javascripts/jquery-1.12.4.min.js')
+    script(type='text/javascript' src='/javascripts/jquery.bottom-1.0.js')
+    script(type='text/javascript' src='/javascripts/jquery.countdown.min.js')
+    script(type='text/javascript' src='/javascripts/moment-with-locales.min.js')
+    script(type='text/javascript' src='/javascripts/Chart.min.js')
+    script(type='text/javascript' src='/javascripts/html2canvas.js')
+    script.
+        var pv = '#{v}';
+    script(type='text/javascript' src='/javascripts/getvote.js')
   body
-    block content
-      #container
-        header
-          #header
-          #column_tab
-        article
-          #panel_vote
-            #left_block
-            #right_block
+    #container
+      header
+        #header
+      article
+        #panel_vote
+          #left_block
+          #right_block

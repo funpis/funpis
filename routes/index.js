@@ -78,26 +78,24 @@ router.get('/v/:vid', function(req, res, next) {
             console.error(err.stack);
             return res.status(500).send('get vote error');
         }
-        console.log('v.vote_id: ', v.vote_id);
 
 	    VoteMenu.findOne({'vote_id': vid}).exec(function(err, vm) {
 	        if (err || !vm) {
 	            console.error(err.stack);
 	            return res.status(500).send('get votemenu error');
 	        }
-            console.log('vm.vote_id: ', vm.vote_id);
 
 		    VoteOption.findOne({'vote_id': vid}).exec(function(err, vo) {
 		        if (err || !vo) {
 		            console.error(err.stack);
 		            return res.status(500).send('get voteoption error');
 		        }
-                console.log('vo.vote_id: ', vo.vote_id);
 
                 var vote = {};
 	            vote.vote = v;
 	            vote.votemenu = vm;
 			    vote.voteoption = vo;
+                console.log('v: ', JSON.stringify(vote));
 
                 return res.render('getvote', {title: 'VoteRun', u: req.user, v: JSON.stringify(vote)});
 		    });
@@ -214,6 +212,7 @@ router.post('/add_vote', function(req, res) {
 
     var vo = new VoteOption();
     vo.vote_id = v.vote_id;
+    vo.sequence = [0, 1, 2, 3, 4, 5, 6];
     vo.name_0 = "Mon";
     vo.count_0 = 0;
     vo.color_0 = [255, 99, 132];

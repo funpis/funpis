@@ -104,6 +104,7 @@ function showHeader() {
     $div_header_menu.append($div_header_menu_account_question);
 }
 
+/*
 function showTabColumn() {
     $('#column_tab').html(
         '<div class="div_column_tab">ALL</div>' +
@@ -123,6 +124,7 @@ $(function() {
         $(this).addClass('div_column_tab_on');
     });
 });
+*/
 
 function loadTopicPic(div_topic, url) {
     var w, h;

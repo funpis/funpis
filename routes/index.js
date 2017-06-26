@@ -4,12 +4,13 @@ var Account = require('../mongo').Account;
 var Vote = require('../mongo').Vote;
 var VoteMenu = require('../mongo').VoteMenu;
 var VoteOption = require('../mongo').VoteOption;
+var VoteTicket = require('../mongo').VoteTicket;
 var VoteComment = require('../mongo').VoteComment;
 var router = express.Router();
 var util = require('util');
 var moment = require('moment');
 
-/* calculate a 12 length id */
+/* calculate a length=12 id */
 function make_12_id() {
     var chars = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     var cl = chars.length;
@@ -20,40 +21,6 @@ function make_12_id() {
     }
 
     return r;
-}
-
-function read_vote_from_db(vid) {
-	var vote = {};
-
-    Vote.findOne({'vote_id': vid}).exec(function(err, v) {
-        if (err || !v) {
-            console.error(err.stack);
-            return res.status(500).send('get vote error');
-        }
-        console.log('v: ', v);
-
-	    VoteMenu.findOne({'vote_id': vid}).exec(function(err, vm) {
-	        if (err || !vm) {
-	            console.error(err.stack);
-	            return res.status(500).send('get votemenu error');
-	        }
-            console.log('vm: ', vm);
-
-		    VoteOption.findOne({'vote_id': vid}).exec(function(err, vo) {
-		        if (err || !vo) {
-		            console.error(err.stack);
-		            return res.status(500).send('get voteoption error');
-		        }
-                console.log('vo: ', vo);
-
-	            vote.vote = v;
-	            vote.votemenu = vm;
-			    vote.voteoption = vo;
-
-	            return vote;
-		    });
-	    });
-    });
 }
 
 /* GET home page. */
@@ -70,9 +37,6 @@ router.get('/vote', function(req, res, next) {
 router.get('/v/:vid', function(req, res, next) {
     console.log('vote_id=', req.params.vid);
     var vid = req.params.vid;
-    //var vote = read_vote_from_db(req.params.vid);
-    //console.log('vote: ', vote);
-    //res.render('getvote', {title: 'VoteRun', u: req.user, v: vote});
     Vote.findOne({'vote_id': vid}).exec(function(err, v) {
         if (err || !v) {
             console.error(err.stack);
@@ -85,11 +49,12 @@ router.get('/v/:vid', function(req, res, next) {
 	            return res.status(500).send('get votemenu error');
 	        }
 
-		    VoteOption.findOne({'vote_id': vid}).exec(function(err, vo) {
+		    VoteOption.findOne({'vote_id': vid}).lean().exec(function(err, vo) {
 		        if (err || !vo) {
 		            console.error(err.stack);
 		            return res.status(500).send('get voteoption error');
 		        }
+                console.log('vo: ', JSON.stringify(vo));
 
                 var vote = {};
 	            vote.vote = v;
@@ -178,11 +143,11 @@ router.post('/add_user', function(req, res) {
 router.post('/add_vote', function(req, res) {
     var v = new Vote();
     v.vote_id = make_12_id();
-    v.vote_title = req.body.title;
+    v.vote_title = req.body.vote_title;
     v.publisher_id = req.body.publisher_id;
     v.publish_time = moment.utc();
     v.expire_time = moment(req.body.expire_time);//'2017-10-10T12:00:00Z'
-    v.chart_type = 'bar';
+    v.chart_type = 'horizontalBar';
     v.topic_title = req.body.topic_title;    
     v.topic_content = req.body.topic_content;
     v.anonymous_publish = req.body.anonymous_publish;
@@ -212,28 +177,35 @@ router.post('/add_vote', function(req, res) {
 
     var vo = new VoteOption();
     vo.vote_id = v.vote_id;
-    vo.sequence = [0, 1, 2, 3, 4, 5, 6];
-    vo.name_0 = "Mon";
-    vo.count_0 = 0;
-    vo.color_0 = [255, 99, 132];
+    vo.option[0] = {"name": "Mon", "type": "fix", "ticket": 10};
+    vo.option[1] = {"name": "Tue", "type": "fix", "ticket": 55};
+    vo.option[2] = {"name": "Wed", "type": "fix", "ticket": 36};
+    vo.option[3] = {"name": "Thu", "type": "fix", "ticket": 11};
+    vo.option[4] = {"name": "Fri", "type": "fix", "ticket": 7};
+    vo.option[5] = {"name": "Sat", "type": "add", "ticket": 15};
+    vo.option[6] = {"name": "Sun", "type": "add", "ticket": 28};
+    /*
+    vo.type_0 = "fix";
+    vo.count_0 = 10;
     vo.name_1 = "Tue";
-    vo.count_1 = 0;
-    vo.color_1 = [54, 162, 235];
+    vo.type_1 = "fix";
+    vo.count_1 = 55;
     vo.name_2 = "Wed";
-    vo.count_2 = 0;
-    vo.color_2 = [255, 206, 86];
+    vo.type_2 = "fix";
+    vo.count_2 = 36;
     vo.name_3 = "Thu";
-    vo.count_3 = 0;
-    vo.color_3 = [75, 192, 192];
+    vo.type_3 = "fix";
+    vo.count_3 = 11;
     vo.name_4 = "Fri";
-    vo.count_4 = 0;
-    vo.color_4 = [153, 99, 255];
+    vo.type_4 = "fix";
+    vo.count_4 = 7;
     vo.name_5 = "Sat";
-    vo.count_5 = 0;
-    vo.color_5 = [255, 159, 64];
+    vo.type_5 = "add";
+    vo.count_5 = 15;
     vo.name_6 = "Sun";
-    vo.count_6 = 0;
-    vo.color_6 = [240, 80, 210];
+    vo.type_6 = "add";
+    vo.count_6 = 28;
+    */
     vo.save(function(err) {
         if (err) {
             VoteMenu.remove({vote_id: v.vote_id}, function(vm_err) {

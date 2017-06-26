@@ -211,8 +211,12 @@ function loadVoteGraph(div_topic, chart_type, chart_data, chart_options) {
 
     var myChart = new Chart(myCanvas, {
         type: chart_type,
+        /*
         data: jQuery.parseJSON(chart_data),
         options: jQuery.parseJSON(chart_options)
+        */
+        data: chart_data,
+        options: chart_options
     });
 
     myCanvas.click(
@@ -256,11 +260,13 @@ function loadTopic() {
             "class": "topic_head"
         });
 
-    var publish_time = calTimeLag(json_js_vote_graph["publish_time"]);
+    //var publish_time = calTimeLag(json_js_vote_graph["publish_time"]);
+    var publish_time = calTimeLag(v.publish_time);
 
     $div_topic_head.append('<div class="topic_head_publisher">' + '@liupeng ' + publish_time + '</div>');
 
-    var expire_time = moment(json_js_vote_graph["expire_time"], "YYYY-MM-DDThh:mm:ssZ")
+    //var expire_time = moment(json_js_vote_graph["expire_time"], "YYYY-MM-DDThh:mm:ssZ")
+    var expire_time = moment(v.expire_time, "YYYY-MM-DDThh:mm:ssZ")
     var $div_countdown = $('<div class="topic_head_countdown"></div>')
         .countdown(expire_time.toDate(), {elapse: false})
         .on('update.countdown', function(event) {
@@ -286,8 +292,55 @@ function loadTopic() {
     loadTopicPic($div_topic, picUrl[0]);
     loadTopicTxt($div_topic, picUrl[0], "aaaaaaaaaa");
 */
-    var chart_type = "bar";
+    //var chart_type = v.chart_type;
+    var chart_type = "horizontalBar";
 
+    var options = vo.option;
+    options.sort(function(a, b) {
+        return (b["ticket"] - a["ticket"]);
+    });
+
+    var bar_name = [];
+    var bar_ticket = [];
+    var bar_color = [];
+    for (var i = 0; i < options.length; i++) {
+        bar_name.push(options[i]["name"]);
+        bar_ticket.push(options[i]["ticket"])
+        if (options[i]["type"] == 'fix') {
+            bar_color.push(v.bar_fix_color);
+        } else {
+            bar_color.push(v.bar_add_color);
+        }
+    }
+
+    var chart_data = {
+        "labels": bar_name,
+        "datasets": [{
+            "label": "ticket count",
+            "data": bar_ticket,
+            "backgroundColor": bar_color
+        }]
+    };
+
+    var chart_options = {
+        "scales": {
+            "yAxes": [{
+                "ticks": {
+                    "beginAtZero":true
+                }
+            }]
+        },
+        "legend": {
+            "display": false
+        },
+        "title": {
+            "display": true,
+            "text": v.vote_title,
+            "fontSize": 18
+        }
+    };
+
+    /*
     var chart_data = '{\
         "labels": ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],\
         "datasets": [{\
@@ -331,6 +384,7 @@ function loadTopic() {
             "fontSize": 18\
         }\
     }';
+    */
 
     var $div_vote_graph = $('<div>',
     {

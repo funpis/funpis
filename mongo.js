@@ -15,9 +15,9 @@ var Vote = new Schema({
     publisher_id: {type: String, required: true},
     publish_time: {type: Date, dafault: Date.now},
     expire_time: {type: Date, dafault: Date.now},
-    chart_type: {type: String, default: 'horizontalBar'},
-    bar_fix_color: {type: String, default: '#36A2EB'},
-    bar_add_color: {type: String, default: '#FF6384'},
+    chart_type: {type: String, default: 'bar'},
+    bar_fix_color: {type: String, default: '#4169e1'},
+    bar_add_color: {type: String, default: '#7cfc00'},
     topic_title: {type: String},
     topic_content: {type: String},
     anonymous_publish: {type: Boolean, required:true},
@@ -38,6 +38,7 @@ var VoteOption = new Schema({
     vote_id: {type: String, required: true},
     option: [{
         name: String,
+        note: String,
         type: String,
         ticket: Number
     }],

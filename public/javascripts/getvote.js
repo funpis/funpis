@@ -222,10 +222,13 @@ function loadVoteGraph(div_topic, chart_type, chart_data, chart_options) {
     myCanvas.click(
         function(evt){
             var p = myChart.getElementsAtEvent(evt);
+            if (!p) {
+                return;
+            }
             var clickedElementIndex = p[0]["_index"];
-            alert(clickedElementIndex);
+            //alert(clickedElementIndex);
             var label = myChart.data.labels[clickedElementIndex];
-            alert(label);
+            //alert(label);
             var value = myChart.data.datasets[0].data[clickedElementIndex];
             alert(value);
             myChart.data.datasets[0].data[clickedElementIndex] = 18;
@@ -293,7 +296,8 @@ function loadTopic() {
     loadTopicTxt($div_topic, picUrl[0], "aaaaaaaaaa");
 */
     //var chart_type = v.chart_type;
-    var chart_type = "horizontalBar";
+    //var chart_type = "horizontalBar";
+    var chart_type = "bar";
 
     var options = vo.option;
     options.sort(function(a, b) {
@@ -303,14 +307,27 @@ function loadTopic() {
     var bar_name = [];
     var bar_ticket = [];
     var bar_color = [];
+    //var bar_note = [];
+    var total_ticket = 0;
     for (var i = 0; i < options.length; i++) {
-        bar_name.push(options[i]["name"]);
-        bar_ticket.push(options[i]["ticket"])
+        var bar_label = [];
+        bar_label.push(options[i]["name"]);
+        bar_label.push(options[i]["ticket"]);
+        bar_name.push(bar_label);
+        bar_ticket.push(options[i]["ticket"]);
+        total_ticket += options[i]["ticket"];
         if (options[i]["type"] == 'fix') {
             bar_color.push(v.bar_fix_color);
         } else {
             bar_color.push(v.bar_add_color);
         }
+        //bar_note.push(i+1);
+    }
+
+    var bar_percentage = [];
+    for (var i = 0; i < options.length; i++) {
+        var p = options[i]["ticket"]/total_ticket;
+        bar_percentage.push(p);
     }
 
     var chart_data = {
@@ -318,17 +335,39 @@ function loadTopic() {
         "datasets": [{
             "label": "ticket count",
             "data": bar_ticket,
-            "backgroundColor": bar_color
+            "backgroundColor": bar_color,
+            //"note": bar_note
         }]
     };
 
     var chart_options = {
         "scales": {
+            "xAxes": [{
+                "ticks": {
+                    "min": 0,
+                    "max": parseInt(Math.max.apply(Math, bar_ticket) * 1.1)
+                }
+            }],
             "yAxes": [{
                 "ticks": {
                     "beginAtZero":true
                 }
             }]
+        },
+        "tooltips": {
+            "enabled": true,
+            "custom": function(tooltip) {
+                if (!tooltip)
+                    return;
+
+                tooltip.displayColors = false;
+            },
+            "callbacks": {
+                "label": function(tooltipItem, data) {
+                    //return data.datasets[tooltipItem.datasetIndex].note[tooltipItem.index];
+                    return "";
+                }
+            }
         },
         "legend": {
             "display": false
@@ -337,7 +376,34 @@ function loadTopic() {
             "display": true,
             "text": v.vote_title,
             "fontSize": 18
-        }
+        },
+        "animation": {
+          "duration": 1,
+          "onComplete": function() {
+            var chartInstance = this.chart;
+            chartInstance.canvas.style.cursor = "pointer";
+            ctx = chartInstance.ctx;
+
+            /*
+            ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, 
+                                                Chart.defaults.global.defaultFontStyle, 
+                                                Chart.defaults.global.defaultFontFamily);
+            */
+            ctx.font = "16px Arial";
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'bottom';
+            ctx.fillStyle = "black";
+
+            chart_data.datasets.forEach(function(dataset, i) {
+                var meta = chartInstance.controller.getDatasetMeta(i);
+                meta.data.forEach(function(bar, index) {
+                    var data = dataset.data[index];
+                    ctx.fillText(data+"%", bar._model.x-20, bar._model.y);
+                    //ctx.fillText(data+"%", bar._model.x-20, bar._model.y);
+                });
+            });
+          }
+        },
     };
 
     /*

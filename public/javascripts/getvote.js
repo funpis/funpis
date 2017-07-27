@@ -324,10 +324,10 @@ function loadTopic() {
         //bar_note.push(i+1);
     }
 
-    var bar_percentage = [];
+    var bar_percent = [];
     for (var i = 0; i < options.length; i++) {
-        var p = options[i]["ticket"]/total_ticket;
-        bar_percentage.push(p);
+        var p = Math.floor(options[i]["ticket"] / total_ticket * 1000) / 10;
+        bar_percent.push(p);
     }
 
     var chart_data = {
@@ -336,6 +336,7 @@ function loadTopic() {
             "label": "ticket count",
             "data": bar_ticket,
             "backgroundColor": bar_color,
+            "percent": bar_percent,
             //"note": bar_note
         }]
     };
@@ -389,7 +390,7 @@ function loadTopic() {
                                                 Chart.defaults.global.defaultFontStyle, 
                                                 Chart.defaults.global.defaultFontFamily);
             */
-            ctx.font = "16px Arial";
+            ctx.font = "12px Arial";
             ctx.textAlign = 'left';
             ctx.textBaseline = 'bottom';
             ctx.fillStyle = "black";
@@ -397,8 +398,8 @@ function loadTopic() {
             chart_data.datasets.forEach(function(dataset, i) {
                 var meta = chartInstance.controller.getDatasetMeta(i);
                 meta.data.forEach(function(bar, index) {
-                    var data = dataset.data[index];
-                    ctx.fillText(data+"%", bar._model.x-20, bar._model.y);
+                    var percent = dataset.percent[index];
+                    ctx.fillText(percent+"%", bar._model.x-25, bar._model.y);
                     //ctx.fillText(data+"%", bar._model.x-20, bar._model.y);
                 });
             });

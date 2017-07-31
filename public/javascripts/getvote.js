@@ -296,8 +296,8 @@ function loadTopic() {
     loadTopicTxt($div_topic, picUrl[0], "aaaaaaaaaa");
 */
     //var chart_type = v.chart_type;
-    //var chart_type = "horizontalBar";
-    var chart_type = "bar";
+    var chart_type = "horizontalBar";
+    //var chart_type = "bar";
 
     var options = vo.option;
     options.sort(function(a, b) {
@@ -311,9 +311,12 @@ function loadTopic() {
     var total_ticket = 0;
     for (var i = 0; i < options.length; i++) {
         var bar_label = [];
+        /*
         bar_label.push(options[i]["name"]);
         bar_label.push(options[i]["ticket"]);
         bar_name.push(bar_label);
+        */
+        bar_name.push(options[i]["name"]);
         bar_ticket.push(options[i]["ticket"]);
         total_ticket += options[i]["ticket"];
         if (options[i]["type"] == 'fix') {
@@ -326,7 +329,7 @@ function loadTopic() {
 
     var bar_percent = [];
     for (var i = 0; i < options.length; i++) {
-        var p = Math.floor(options[i]["ticket"] / total_ticket * 1000) / 10;
+        var p = options[i]["ticket"] + "v, " + Math.floor(options[i]["ticket"] / total_ticket * 1000) / 10 + "%";
         bar_percent.push(p);
     }
 
@@ -346,12 +349,7 @@ function loadTopic() {
             "xAxes": [{
                 "ticks": {
                     "min": 0,
-                    "max": parseInt(Math.max.apply(Math, bar_ticket) * 1.1)
-                }
-            }],
-            "yAxes": [{
-                "ticks": {
-                    "beginAtZero":true
+                    "max": parseInt(Math.max.apply(Math, bar_ticket) * 1.25)
                 }
             }]
         },
@@ -362,12 +360,14 @@ function loadTopic() {
                     return;
 
                 tooltip.displayColors = false;
+/*
             },
             "callbacks": {
                 "label": function(tooltipItem, data) {
                     //return data.datasets[tooltipItem.datasetIndex].note[tooltipItem.index];
                     return "";
                 }
+*/
             }
         },
         "legend": {
@@ -390,7 +390,7 @@ function loadTopic() {
                                                 Chart.defaults.global.defaultFontStyle, 
                                                 Chart.defaults.global.defaultFontFamily);
             */
-            ctx.font = "12px Arial";
+            ctx.font = "15px Arial";
             ctx.textAlign = 'left';
             ctx.textBaseline = 'bottom';
             ctx.fillStyle = "black";
@@ -399,7 +399,7 @@ function loadTopic() {
                 var meta = chartInstance.controller.getDatasetMeta(i);
                 meta.data.forEach(function(bar, index) {
                     var percent = dataset.percent[index];
-                    ctx.fillText(percent+"%", bar._model.x-25, bar._model.y);
+                    ctx.fillText(percent, bar._model.x+2, bar._model.y+8);
                     //ctx.fillText(data+"%", bar._model.x-20, bar._model.y);
                 });
             });

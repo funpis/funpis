@@ -38,9 +38,15 @@ var VoteTopic = new Schema({
     topic_url: {type: String},
 });
 
+var Tag = new Schema({
+    tag_id: {type: String, required: true},
+    tag_name: {type: String, required: true},
+    tag_count: {type: Number, default: 0},
+});
+
 var VoteTag = new Schema({
     vote_id: {type: String, required: true},
-    tag: {type: String},
+    tag_id: {type: String, required: true},
 });
 
 var VoteMenu = new Schema({
@@ -99,6 +105,7 @@ module.exports = {
   Account: mongoose.model('Account', Account),
   Vote: mongoose.model('Vote', Vote),
   VoteTopic: mongoose.model('VoteTopic', VoteTopic),
+  Tag: mongoose.model('Tag', Tag),
   VoteTag: mongoose.model('VoteTag', VoteTag),
   VoteMenu: mongoose.model('VoteMenu', VoteMenu),
   VoteOption: mongoose.model('VoteOption', VoteOption),

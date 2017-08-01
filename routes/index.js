@@ -5,6 +5,7 @@ var Vote = require('../mongo').Vote;
 var VoteMenu = require('../mongo').VoteMenu;
 var VoteOption = require('../mongo').VoteOption;
 var VoteTicket = require('../mongo').VoteTicket;
+var VoteTopic = require('../mongo').VoteTopic;
 var VoteComment = require('../mongo').VoteComment;
 var router = express.Router();
 var util = require('util');
@@ -40,32 +41,50 @@ router.get('/v/:vid', function(req, res, next) {
     Vote.findOne({'vote_id': vid}).exec(function(err, v) {
         if (err || !v) {
             console.error(err.stack);
-            return res.status(500).send('get vote error');
+            return res.status(500).send('get Vote error');
         }
 
-	    VoteMenu.findOne({'vote_id': vid}).exec(function(err, vm) {
-	        if (err || !vm) {
-	            console.error(err.stack);
-	            return res.status(500).send('get votemenu error');
-	        }
+    VoteMenu.findOne({'vote_id': vid}).exec(function(err, vm) {
+        if (err || !vm) {
+            console.error(err.stack);
+            return res.status(500).send('get VoteMenu error');
+        }
 
-		    VoteOption.findOne({'vote_id': vid}).lean().exec(function(err, vo) {
-		        if (err || !vo) {
-		            console.error(err.stack);
-		            return res.status(500).send('get voteoption error');
-		        }
-                console.log('vo: ', JSON.stringify(vo));
+    VoteOption.findOne({'vote_id': vid}).lean().exec(function(err, vo) {
+        if (err || !vo) {
+            console.error(err.stack);
+            return res.status(500).send('get VoteOption error');
+        }
+        console.log('vo: ', JSON.stringify(vo));
 
-                var vote = {};
-	            vote.vote = v;
-	            vote.votemenu = vm;
-			    vote.voteoption = vo;
-                console.log('v: ', JSON.stringify(vote));
+    VoteTopic.findOne({'vote_id': vid}).lean().exec(function(err, vt) {
+        if (err || !vt) {
+            console.error(err.stack);
+            return res.status(500).send('get VoteTopic error');
+        }
+        console.log('vt: ', JSON.stringify(vt));
 
-                return res.render('getvote', {title: 'VoteRun', u: req.user, v: JSON.stringify(vote)});
-		    });
-	    });
-    });
+    VoteComment.findOne({'vote_id': vid}).lean().exec(function(err, vc) {
+        if (err || !vc) {
+            console.error(err.stack);
+            return res.status(500).send('get VoteComment error');
+        }
+        console.log('vc: ', JSON.stringify(vc));
+
+        var vote = {};
+        vote.vote = v;
+        vote.votemenu = vm;
+        vote.voteoption = vo;
+        vote.votetopic = vt;
+        vote.votecomment = vc;
+        console.log('v: ', JSON.stringify(vote));
+
+        return res.render('getvote', {title: 'VoteRun', u: req.user, v: JSON.stringify(vote)});
+    }); // VoteComment
+    }); // VoteTopic
+    }); // VoteOption
+    }); // VoteMenu
+    }); // Vote
 });
 
 /* GET new vote page. */

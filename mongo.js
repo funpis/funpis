@@ -112,4 +112,4 @@ module.exports = {
   VoteTicket: mongoose.model('VoteTicket', VoteTicket),
   VoteComment: mongoose.model('VoteComment', VoteComment),
   VoteCommentTap: mongoose.model('VoteCommentTap', VoteCommentTap),
-}
+};

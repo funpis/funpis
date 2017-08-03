@@ -9,7 +9,7 @@ var v = vote.vote;
 var vm = vote.votemenu;
 var vo = vote.voteoption;
 var vt = vote.votetopic;
-var vc = vote.votecomment;
+//var vc = vote.votecomment;
 
 $(document).ready(function() {
     $('#right_block').bottom({proximity: 0.02});
@@ -23,7 +23,7 @@ $(document).ready(function() {
             setTimeout(function() {
                 $('#right_block>div.loading').remove();
 
-                //downloadPics();
+                //downloadComment();
 
                 obj.data('loading', false);
             }, 1000);
@@ -55,7 +55,7 @@ function showHeader() {
             "id": "div_header_logo",
             "class": "div_header_logo",
             html: '<a href="#" onclick="readInitPics()">' +
-                    '<img src="http://localhost:3000/images/funpis.40.png" alt="funpis" title="funpis logo" />' +
+                    '<img src="http://voterun.com:3000/images/funpis.40.png" alt="funpis" title="funpis logo" />' +
                   '</a>'
         });
     $('#header').append($div_header_logo);
@@ -99,7 +99,7 @@ function showHeader() {
             "id": "div_header_menu_account_question",
             "class": "div_header_menu_account_question",
             html: '<a href="#" onclick="alert(1)">' +
-                    '<img src="http://localhost:3000/images/question.mark.40.png" alt="question" title="question" />' +
+                    '<img src="http://voterun.com:3000/images/question.mark.40.png" alt="question" title="question" />' +
                   '</a>'
         });
     $div_header_menu.append($div_header_menu_account_question);
@@ -171,45 +171,6 @@ function loadVoteGraph(div_topic, chart_type, chart_data, chart_options) {
 
     div_topic.append(myCanvas);
 
-/*
-    var chart_type = "bar";
-
-    var chart_data = {
-        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-        datasets: [{
-            label: "# of Votes",
-            data: [12, 19, 3, 5, 2, 3],
-            backgroundColor: [
-                "rgba(255, 99, 132, 0.2)",
-                "rgba(54, 162, 235, 0.2)",
-                "rgba(255, 206, 86, 0.2)",
-                "rgba(75, 192, 192, 0.2)",
-                "rgba(153, 102, 255, 0.2)",
-                "rgba(255, 159, 64, 0.2)"
-            ],
-            borderColor: [
-                "rgba(255,99,132,1)",
-                "rgba(54, 162, 235, 1)",
-                "rgba(255, 206, 86, 1)",
-                "rgba(75, 192, 192, 1)",
-                "rgba(153, 102, 255, 1)",
-                "rgba(255, 159, 64, 1)"
-            ],
-            borderWidth: 1
-        }]
-    };
-
-    var chart_options = {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero:true
-                }
-            }]
-        }
-    };
-*/
-
     var myChart = new Chart(myCanvas, {
         type: chart_type,
         /*
@@ -264,12 +225,10 @@ function loadTopic() {
             "class": "topic_head"
         });
 
-    //var publish_time = calTimeLag(json_js_vote_graph["publish_time"]);
     var publish_time = calTimeLag(v.publish_time);
 
     $div_topic_head.append('<div class="topic_head_publisher">' + '@liupeng ' + publish_time + '</div>');
 
-    //var expire_time = moment(json_js_vote_graph["expire_time"], "YYYY-MM-DDThh:mm:ssZ")
     var expire_time = moment(v.expire_time, "YYYY-MM-DDThh:mm:ssZ")
     var $div_countdown = $('<div class="topic_head_countdown"></div>')
         .countdown(expire_time.toDate(), {elapse: false})
@@ -292,13 +251,8 @@ function loadTopic() {
 
     $div_topic.append($div_topic_head);
 
-/*
-    loadTopicPic($div_topic, picUrl[0]);
-    loadTopicTxt($div_topic, picUrl[0], "aaaaaaaaaa");
-*/
-    //var chart_type = v.chart_type;
-    var chart_type = "horizontalBar";
-    //var chart_type = "bar";
+    var chart_type = v.chart_type;
+    //var chart_type = "horizontalBar";
 
     var options = vo.option;
     options.sort(function(a, b) {
@@ -312,11 +266,6 @@ function loadTopic() {
     var total_ticket = 0;
     for (var i = 0; i < options.length; i++) {
         var bar_label = [];
-        /*
-        bar_label.push(options[i]["name"]);
-        bar_label.push(options[i]["ticket"]);
-        bar_name.push(bar_label);
-        */
         bar_name.push(options[i]["name"]);
         bar_ticket.push(options[i]["ticket"]);
         total_ticket += options[i]["ticket"];
@@ -386,11 +335,6 @@ function loadTopic() {
             chartInstance.canvas.style.cursor = "pointer";
             ctx = chartInstance.ctx;
 
-            /*
-            ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, 
-                                                Chart.defaults.global.defaultFontStyle, 
-                                                Chart.defaults.global.defaultFontFamily);
-            */
             ctx.font = "15px Arial";
             ctx.textAlign = 'left';
             ctx.textBaseline = 'bottom';
@@ -401,58 +345,11 @@ function loadTopic() {
                 meta.data.forEach(function(bar, index) {
                     var percent = dataset.percent[index];
                     ctx.fillText(percent, bar._model.x+2, bar._model.y+8);
-                    //ctx.fillText(data+"%", bar._model.x-20, bar._model.y);
                 });
             });
           }
         },
     };
-
-    /*
-    var chart_data = '{\
-        "labels": ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],\
-        "datasets": [{\
-            "label": "ticket count",\
-            "data": [12, 19, 3, 5, 2, 3],\
-            "backgroundColor": [\
-                "rgba(255, 99, 132, 0.2)",\
-                "rgba(54, 162, 235, 0.2)",\
-                "rgba(255, 206, 86, 0.2)",\
-                "rgba(75, 192, 192, 0.2)",\
-                "rgba(153, 102, 255, 0.2)",\
-                "rgba(255, 159, 64, 0.2)"\
-            ],\
-            "borderColor": [\
-                "rgba(255,99,132,1)",\
-                "rgba(54, 162, 235, 1)",\
-                "rgba(255, 206, 86, 1)",\
-                "rgba(75, 192, 192, 1)",\
-                "rgba(153, 102, 255, 1)",\
-                "rgba(255, 159, 64, 1)"\
-            ],\
-            "borderWidth": 1\
-        }]\
-    }';
-
-    var chart_options = '{\
-        "scales": {\
-            "yAxes": [{\
-                "ticks": {\
-                    "beginAtZero":true\
-                }\
-            }]\
-        },\
-        "legend": {\
-            "display": false,\
-            "position": "right"\
-        },\
-        "title": {\
-            "display": true,\
-            "text": "test vote",\
-            "fontSize": 18\
-        }\
-    }';
-    */
 
     var $div_vote_graph = $('<div>',
     {
@@ -466,14 +363,14 @@ function loadTopic() {
         {
             "class": "topic_foot",
             html: '<div class="topic_foot_left">' +
-                    '<a id="a_shoot" href="#" onclick="clickShoot()"><div class="div_hover_click_shoot"><img height="25" src="http://localhost:3000/images/camera48.png" alt="SHOOT" title="SHOOT" /></div></a>' +
-                    '<div class="div_left_margin" style="font-size:1.2em;">999K</div>' +
+                    '<a id="a_shoot" href="#" onclick="clickShoot()"><div class="div_hover_click_shoot"><img height="25" src="http://voterun.com:3000/images/camera48.png" alt="SHOOT" title="SHOOT" /></div></a>' +
+                    '<div class="div_left_margin" style="font-size:1.2em;">' + vm.shoot + '</div>' +
                   '</div>' + 
                   '<div class="topic_foot_right">' +
-                    '<div class="div_hover_click div_left_margin"><img height="25" src="http://localhost:3000/images/quote48.png" alt="QUOTE" title="QUOTE" /></div>' +
-                    '<div class="div_left_margin" style="font-size:1.2em;">888K</div>' +
-                    '<div class="div_hover_click div_left_margin"><img height="30" src="http://localhost:3000/images/glasses48.png" alt="WATCH" title="WATCH" /></div>' +
-                    '<div class="div_left_margin" style="font-size:1.2em;">777K</div>' +
+                    '<div class="div_hover_click div_left_margin"><img height="25" src="http://voterun.com:3000/images/quote48.png" alt="QUOTE" title="QUOTE" /></div>' +
+                    '<div class="div_left_margin" style="font-size:1.2em;">' + vm.quote + '</div>' +
+                    '<div class="div_hover_click div_left_margin"><img height="30" src="http://voterun.com:3000/images/glasses48.png" alt="WATCH" title="WATCH" /></div>' +
+                    '<div class="div_left_margin" style="font-size:1.2em;">' + vm.watch + '</div>' +
                   '</div>'
         });
     $div_topic.append($div_vote_func);
@@ -481,15 +378,21 @@ function loadTopic() {
     var html_vote_graph_legend = '<table style="table-layout:fixed; width:100%; word-wrap:break-word;">' +
         '<colgroup>' +
         '<col style="width:20%;">' +
-        '<col style="width:80%;">' +
-        '</colgroup>' +
-        '<tr onclick="alert(333);">' +
-        '<td valign="top">' + 'Red :' + '</td>' +
-        '<td valign="top">' + '中国からインターネット経由で日本の通販サイトなどで買い物をした金額が、２０１６年に初めて１兆円を突破したことが経済産業省の調査でわかった。<br>123 5%' + '</td>' +
-        '</tr>' +
+        '<col style="width:70%;">' +
+        '<col style="width:10%;">' +
+        '</colgroup>';
+    for (var i = 0; i < options.length; i++) {
+        html_vote_graph_legend +=
+        '<tr onclick="alert(333);" style="cursor: pointer;" title="Click to Vote!">' +
+        '<td valign="top">' + options[i]["name"] + '</td>' +
+        '<td valign="top">' + options[i]["note"] + '</td>' +
+        '<td valign="top">' + options[i]["ticket"] + '</td>' +
+        '</tr>';
+    }
+    /*
         '<tr onclick="alert(444);">' +
         '<td valign="top">' + 'BlueBlueBlueBlueBlueBlueBlue :' + '</td>' +
-        '<td valign="top">' + 'BlueBlueBlue<br><img src="http://localhost:3000/funimg/beijing.jpg"/>' + '</td>' +
+        '<td valign="top">' + 'BlueBlueBlue<br><img src="http://voterun.com:3000/funimg/beijing.jpg"/>' + '</td>' +
         '</tr>' +
         '<tr>' +
         '<td valign="top">' + 'Yellow :' + '</td>' +
@@ -507,7 +410,9 @@ function loadTopic() {
         '<td valign="top">' + 'Orange :' + '</td>' +
         '<td valign="top">' + '456' + '</td>' +
         '</tr>' +
-        '</table>'
+    */
+    html_vote_graph_legend += '</table>';
+
     var $div_vote_graph_legend = $('<div>',
     {
         "class": "vote_graph_legend",
@@ -515,10 +420,12 @@ function loadTopic() {
     })
     $div_topic.append($div_vote_graph_legend);
 
+    var html_vote_topic = '<Hr Align="center" Width="80%">' +
+                          vt.topic_title + '<br>' + vt.topic_content;
     var $div_vote_topic = $('<div>',
     {
         "class": "vote_topic",
-        "html": '<Hr Align="center" Width="80%">vote topic<br>ali<br>egna<br>pnv<br>bgn<br>vba<br>omvnv<br>'
+        "html": html_vote_topic
     })
     $div_topic.append($div_vote_topic);
 
@@ -632,14 +539,14 @@ new Clipboard('.div_hover_click_shoot', {
 }
 
 var picUrl = [
-    "http://localhost:3000/funimg/einstein01.jpeg",
-    "http://localhost:3000/funimg/trump_bainian.jpg",
-    "http://localhost:3000/funimg/weiqu.jpg",
-    "http://localhost:3000/funimg/zhen.jpg",
-    "http://localhost:3000/funimg/xi.jpg",
-    "http://localhost:3000/funimg/tangseng.fuck.png",
-    "http://localhost:3000/funimg/29.gif",
-    "http://localhost:3000/funimg/beijing.jpg",
+    "http://voterun.com:3000/funimg/einstein01.jpeg",
+    "http://voterun.com:3000/funimg/trump_bainian.jpg",
+    "http://voterun.com:3000/funimg/weiqu.jpg",
+    "http://voterun.com:3000/funimg/zhen.jpg",
+    "http://voterun.com:3000/funimg/xi.jpg",
+    "http://voterun.com:3000/funimg/tangseng.fuck.png",
+    "http://voterun.com:3000/funimg/29.gif",
+    "http://voterun.com:3000/funimg/beijing.jpg",
 ];
 
 var json_js_vote_graph = {
@@ -651,7 +558,7 @@ var json_js_vote_graph = {
     "publisher": {
         "name": "liupeng",
         "url": "http://yahoo.co.jp",
-        "icon": "http://localhost:3000/funimg/einstein01.jpeg"
+        "icon": "http://voterun.com:3000/funimg/einstein01.jpeg"
     },
     "chart": {
         "type": "bar",
@@ -717,7 +624,7 @@ var json_js_vote_option = {
             "name": "Red",
             "count": 123,
             "percent": 5,
-            "note": "abcdRed<br><img src='http://localhost:3000/funimg/beijing.jpg'/>"
+            "note": "abcdRed<br><img src='http://voterun.com:3000/funimg/beijing.jpg'/>"
         },
         {
             "name": "BlueBlueBlueBlueBlueBlueBlue",
@@ -741,7 +648,7 @@ var json_db_comment = {
     "publisher": {
         "name": "test01",
         "url": "http://yahoo.co.jp",
-        "icon": "http://localhost:3000/funimg/einstein01.jpeg"
+        "icon": "http://voterun.com:3000/funimg/einstein01.jpeg"
     },
     "content": "test comment",
     "parent_id": "none"
@@ -754,7 +661,7 @@ var json_js_comment = [
         "publisher": {
             "name": "test01",
             "url": "http://yahoo.co.jp",
-            "icon": "http://localhost:3000/funimg/einstein01.jpeg"
+            "icon": "http://voterun.com:3000/funimg/einstein01.jpeg"
         },
         "good": 100,
         "bad": 50,
@@ -766,12 +673,12 @@ var json_js_comment = [
             "publisher": {
                 "name": "test02",
                 "url": "http://yahoo.co.jp",
-                "icon": "http://localhost:3000/funimg/einstein01.jpeg"
+                "icon": "http://voterun.com:3000/funimg/einstein01.jpeg"
                 },
             "good": 76100,
             "bad": 5034,
             "content": "test comment 2<br>" +
-                       "<img src='http://localhost:3000/funimg/zhen.jpg'/>"
+                       "<img src='http://voterun.com:3000/funimg/zhen.jpg'/>"
             },
             {
             "comment_id": "1234567890ac",
@@ -779,7 +686,7 @@ var json_js_comment = [
             "publisher": {
                 "name": "test03",
                 "url": "http://yahoo.co.jp",
-                "icon": "http://localhost:3000/funimg/einstein01.jpeg"
+                "icon": "http://voterun.com:3000/funimg/einstein01.jpeg"
                 },
             "good": 3100,
             "bad": 3450,
@@ -793,7 +700,7 @@ var json_js_comment = [
         "publisher": {
             "name": "test11",
             "url": "http://yahoo.co.jp",
-            "icon": "http://localhost:3000/funimg/einstein01.jpeg"
+            "icon": "http://voterun.com:3000/funimg/einstein01.jpeg"
         },
         "good": 154600,
         "bad": 5,
@@ -805,12 +712,12 @@ var json_js_comment = [
             "publisher": {
                 "name": "test12",
                 "url": "http://yahoo.co.jp",
-                "icon": "http://localhost:3000/funimg/einstein01.jpeg"
+                "icon": "http://voterun.com:3000/funimg/einstein01.jpeg"
                 },
             "good": 13200,
             "bad": 5420,
             "content": "test comment 12<br>" +
-                       "<img src='http://localhost:3000/funimg/zhen.jpg'/>"
+                       "<img src='http://voterun.com:3000/funimg/zhen.jpg'/>"
             }
         ]
     },
@@ -820,14 +727,14 @@ var json_js_comment = [
         "publisher": {
             "name": "test21",
             "url": "http://yahoo.co.jp",
-            "icon": "http://localhost:3000/funimg/einstein01.jpeg"
+            "icon": "http://voterun.com:3000/funimg/einstein01.jpeg"
         },
         "good": 1230,
         "bad": 232,
         "content": "test comment 21<br>" +
-                   "<img src='http://localhost:3000/funimg/beijing.jpg'/><br>" +
-                   "<img src='http://localhost:3000/funimg/weiqu.jpg'/><br>" +
-                   "<img src='http://localhost:3000/funimg/29.gif'/>",
+                   "<img src='http://voterun.com:3000/funimg/beijing.jpg'/><br>" +
+                   "<img src='http://voterun.com:3000/funimg/weiqu.jpg'/><br>" +
+                   "<img src='http://voterun.com:3000/funimg/29.gif'/>",
         "child": null
     }
 ];
@@ -931,7 +838,7 @@ function loadComment() {
         {
             "class": "comment_right_item",
             html: '<a href="#" onclick="alert(777)">' +
-                    '<img src="http://localhost:3000/images/good.png" width="20px" height="20px" />' + c["good"] +
+                    '<img src="http://voterun.com:3000/images/good.png" width="20px" height="20px" />' + c["good"] +
                   '</a>'
         });
         $div_comment_right_top.append($div_comment_right_top_good);
@@ -944,7 +851,7 @@ function loadComment() {
         {
             "class": "comment_right_item",
             html: '<a href="#" onclick="alert(888)">' +
-                    '<img src="http://localhost:3000/images/bad.png" width="20px" height="20px" />' + c["bad"] +
+                    '<img src="http://voterun.com:3000/images/bad.png" width="20px" height="20px" />' + c["bad"] +
                   '</a>'
         });
         $div_comment_right_top.append($div_comment_right_top_bad);
@@ -1018,7 +925,7 @@ function loadComment() {
             {
                 "class": "comment_right_item",
                 html: '<a href="#" onclick="alert(777)">' +
-                        '<img src="http://localhost:3000/images/good.png" width="20px" height="20px" />' + child["good"] +
+                        '<img src="http://voterun.com:3000/images/good.png" width="20px" height="20px" />' + child["good"] +
                       '</a>'
             });
             $div_child_comment_right_top.append($div_comment_right_top_good);
@@ -1031,7 +938,7 @@ function loadComment() {
             {
                 "class": "comment_right_item",
                 html: '<a href="#" onclick="alert(888)">' +
-                        '<img src="http://localhost:3000/images/bad.png" width="20px" height="20px" />' + child["bad"] +
+                        '<img src="http://voterun.com:3000/images/bad.png" width="20px" height="20px" />' + child["bad"] +
                       '</a>'
             });
             $div_child_comment_right_top.append($div_comment_right_top_bad);
@@ -1121,22 +1028,22 @@ function loginSuccess() {
     $('#div_header_menu_account').html(
         '<div class="div_header_menu_account_item">' +
           '<a href="#" onclick="clickUserLike()">' +
-            '<img src="http://localhost:3000/images/24/heart2.png" alt="LIKE" title="LIKE" />' +
+            '<img src="http://voterun.com:3000/images/24/heart2.png" alt="LIKE" title="LIKE" />' +
           '</a>' +
         '</div>' +
         '<div class="div_header_menu_account_item">' +
           '<a href="#" onclick="clickUserStock()">' +
-            '<img src="http://localhost:3000/images/24/stock.png" alt="STOCK" title="STOCK" /></div>' +
+            '<img src="http://voterun.com:3000/images/24/stock.png" alt="STOCK" title="STOCK" /></div>' +
           '</a>' +
         '</div>' +
         '<div class="div_header_menu_account_item">' +
           '<a href="#" onclick="clickUserUpload()">' +
-            '<img src="http://localhost:3000/images/24/upload.png" alt="UPLOAD" title="UPLOAD" /></div>' +
+            '<img src="http://voterun.com:3000/images/24/upload.png" alt="UPLOAD" title="UPLOAD" /></div>' +
           '</a>' +
         '</div>' +
         '<div class="div_header_menu_account_item">' +
           '<a href="#" onclick="clickUserAccount()">' +
-            '<img src="http://localhost:3000/images/24/account.jpg" alt="ACCOUNT" title="ACCOUNT" /></div>' +
+            '<img src="http://voterun.com:3000/images/24/account.jpg" alt="ACCOUNT" title="ACCOUNT" /></div>' +
           '</a>' +
         '</div>'
     );

@@ -55,28 +55,25 @@ router.get('/v/:vid', function(req, res, next) {
             console.error(err.stack);
             return res.status(500).send('get VoteOption error');
         }
-        console.log('vo: ', JSON.stringify(vo));
 
     VoteTopic.findOne({'vote_id': vid}).lean().exec(function(err, vt) {
         if (err || !vt) {
             console.error(err.stack);
             return res.status(500).send('get VoteTopic error');
         }
-        console.log('vt: ', JSON.stringify(vt));
 
     VoteComment.findOne({'vote_id': vid}).lean().exec(function(err, vc) {
         if (err || !vc) {
             console.error(err.stack);
             return res.status(500).send('get VoteComment error');
         }
-        console.log('vc: ', JSON.stringify(vc));
 
         var vote = {};
         vote.vote = v;
         vote.votemenu = vm;
         vote.voteoption = vo;
         vote.votetopic = vt;
-        vote.votecomment = vc;
+        //vote.votecomment = vc;
         console.log('v: ', JSON.stringify(vote));
 
         return res.render('getvote', {title: 'VoteRun', u: req.user, v: JSON.stringify(vote)});

@@ -62,7 +62,7 @@ router.get('/v/:vid', function(req, res, next) {
             return res.status(500).send('get VoteTopic error');
         }
 
-    VoteComment.findOne({'vote_id': vid}).lean().exec(function(err, vc) {
+    VoteComment.find({'vote_id': vid}).lean().exec(function(err, vc) {
         if (err || !vc) {
             console.error(err.stack);
             return res.status(500).send('get VoteComment error');
@@ -73,10 +73,14 @@ router.get('/v/:vid', function(req, res, next) {
         vote.votemenu = vm;
         vote.voteoption = vo;
         vote.votetopic = vt;
-        //vote.votecomment = vc;
-        console.log('v: ', JSON.stringify(vote));
+        vote.votecomment = vc;
 
-        return res.render('getvote', {title: 'VoteRun', u: req.user, v: JSON.stringify(vote)});
+        v_str = JSON.stringify(vote);
+        v_str = v_str.replace(/\//g, "\\/");
+        v_str = v_str.replace(/\'/g, "\\'");
+        console.log('v_str: ', v_str);
+
+        return res.render('getvote', {title: 'VoteRun', u: req.user, v: v_str});
     }); // VoteComment
     }); // VoteTopic
     }); // VoteOption

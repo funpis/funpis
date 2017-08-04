@@ -9,7 +9,7 @@ var v = vote.vote;
 var vm = vote.votemenu;
 var vo = vote.voteoption;
 var vt = vote.votetopic;
-//var vc = vote.votecomment;
+var vc = vote.votecomment;
 
 $(document).ready(function() {
     $('#right_block').bottom({proximity: 0.02});
@@ -207,6 +207,36 @@ function loadTopicTxt(div_topic, url, txt) {
     }));
 }
 
+function format_ticket_count(count) {
+    if (count > 1000000000) {
+        if (count / 1000000000 > 10) {
+            return Math.floor(count / 1000000000 * 10) / 10 + "B"
+        } else {
+            return Math.floor(count / 1000000000 * 100) / 100 + "B"
+        }
+    }
+    else if (count > 1000000) {
+        if (count / 1000000 > 10) {
+            return Math.floor(count / 1000000 * 10) / 10 + "M"
+        } else {
+            return Math.floor(count / 1000000 * 100) / 100 + "M"
+        }
+    }
+    else if (count > 1000) {
+        if (count / 1000 > 10) {
+            return Math.floor(count / 1000 * 10) / 10 + "K"
+        } else {
+            return Math.floor(count / 1000 * 100) / 100 + "K"
+        }
+    }
+
+    return count;
+}
+
+function format_ticket_comma(count) {
+    return String(count).replace( /(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
+}
+
 function loadTopic() {
     var $div_topic = $('<div>',
     {
@@ -269,7 +299,7 @@ function loadTopic() {
         bar_name.push(options[i]["name"]);
         bar_ticket.push(options[i]["ticket"]);
         total_ticket += options[i]["ticket"];
-        if (options[i]["type"] == 'fix') {
+        if (options[i]["fix"]) {
             bar_color.push(v.bar_fix_color);
         } else {
             bar_color.push(v.bar_add_color);
@@ -279,7 +309,7 @@ function loadTopic() {
 
     var bar_percent = [];
     for (var i = 0; i < options.length; i++) {
-        var p = options[i]["ticket"] + "v, " + Math.floor(options[i]["ticket"] / total_ticket * 1000) / 10 + "%";
+        var p = format_ticket_count(options[i]["ticket"]) + "v, " + Math.floor(options[i]["ticket"] / total_ticket * 1000) / 10 + "%";
         bar_percent.push(p);
     }
 
@@ -310,14 +340,12 @@ function loadTopic() {
                     return;
 
                 tooltip.displayColors = false;
-/*
             },
             "callbacks": {
                 "label": function(tooltipItem, data) {
-                    //return data.datasets[tooltipItem.datasetIndex].note[tooltipItem.index];
-                    return "";
+                    count = format_ticket_comma(data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index]);
+                    return count + "v, Click to Vote!";
                 }
-*/
             }
         },
         "legend": {
@@ -378,15 +406,21 @@ function loadTopic() {
     var html_vote_graph_legend = '<table style="table-layout:fixed; width:100%; word-wrap:break-word;">' +
         '<colgroup>' +
         '<col style="width:20%;">' +
-        '<col style="width:70%;">' +
-        '<col style="width:10%;">' +
+        '<col style="width:63%;">' +
+        '<col style="width:17%;">' +
         '</colgroup>';
     for (var i = 0; i < options.length; i++) {
+        var tr_bg = "#FFFFFF";
+        if (options[i]["fix"]) {
+            tr_bg = v.bar_fix_color;
+        } else {
+            tr_bg = v.bar_add_color;
+        }
         html_vote_graph_legend +=
-        '<tr onclick="alert(333);" style="cursor: pointer;" title="Click to Vote!">' +
+        '<tr onclick="alert(333);" style="cursor: pointer;" title="Click to Vote!" bgcolor=' + tr_bg + '>' +
         '<td valign="top">' + options[i]["name"] + '</td>' +
         '<td valign="top">' + options[i]["note"] + '</td>' +
-        '<td valign="top">' + options[i]["ticket"] + '</td>' +
+        '<td valign="top">' + format_ticket_comma(options[i]["ticket"]) + '</td>' +
         '</tr>';
     }
     /*

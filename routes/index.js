@@ -1,5 +1,5 @@
 var express = require('express');
-//var passport = require('passport');
+var passport = require('passport');
 var Account = require('../mongo').Account;
 var Vote = require('../mongo').Vote;
 var VoteMenu = require('../mongo').VoteMenu;
@@ -10,6 +10,21 @@ var VoteComment = require('../mongo').VoteComment;
 var router = express.Router();
 var util = require('util');
 var moment = require('moment');
+var crypto = require('crypto');
+
+
+var isLogined = function(req, res, next) {
+    if (req.isAuthenticated())
+        return next();
+
+    return res.redirect("/login");
+}
+
+var get_hash = function(target) {
+    var sha = crypto.createHmac("sha256", 'voterunvote');
+    sha.update(target);
+    return sha.digest("hex");
+}
 
 /* calculate a length=12 id */
 function make_12_id() {
@@ -24,14 +39,58 @@ function make_12_id() {
     return r;
 }
 
+function make_user_str(user) {
+    var u_str = '';
+
+    if (user) {
+        var u_dic = {};
+        u_dic.user_id  = user.user_id;
+        u_dic.username = user.username;
+        u_dic.email    = user.email;
+
+        u_str = JSON.stringify(u_dic);
+        u_str = u_str.replace(/\//g, "\\/");
+        u_str = u_str.replace(/\'/g, "\\'");
+    }
+    console.log('u_str: ', u_str);
+
+    return u_str;
+}
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    res.render('index', {title: 'FunPis', user: req.user});
+    u_str = make_user_str(req.user);
+
+    res.render('vote', {title: 'VoteRun', u: u_str});
+});
+
+/* Login page */
+router.get('/login', function(req, res, next) {
+    u_str = make_user_str(req.user);
+
+    res.render('login', {title: 'VoteRun', u: u_str, message: req.flash("error")});
+});
+
+router.post("/login", 
+    passport.authenticate("local", {failureRedirect: '/login', failureFlash: true}),
+    function(req, res){
+        res.redirect("/");
+    }
+);
+
+router.get("/logout", function(req, res){
+    req.logout();
+    res.redirect("/");
 });
 
 /* GET vote page. */
+/*
+router.get('/vote', isLogined, function(req, res, next) {
+*/
 router.get('/vote', function(req, res, next) {
-    res.render('vote', {title: 'VoteRun', user: req.user});
+    u_str = make_user_str(req.user);
+
+    res.render('vote', {title: 'VoteRun', u: u_str});
 });
 
 /* GET vote page by a vote id. */
@@ -80,7 +139,9 @@ router.get('/v/:vid', function(req, res, next) {
         v_str = v_str.replace(/\'/g, "\\'");
         console.log('v_str: ', v_str);
 
-        return res.render('getvote', {title: 'VoteRun', u: req.user, v: v_str});
+        u_str = make_user_str(req.user);
+
+        return res.render('getvote', {title: 'VoteRun', u: u_str, v: v_str});
     }); // VoteComment
     }); // VoteTopic
     }); // VoteOption
@@ -90,7 +151,7 @@ router.get('/v/:vid', function(req, res, next) {
 
 /* GET new vote page. */
 router.get('/new', function(req, res, next) {
-    res.render('new_vote', {title: 'VoteRun', user: req.user});
+    res.render('new_vote', {title: 'VoteRun'});
 });
 
 /*
@@ -128,17 +189,6 @@ router.get('/login', function(req, res) {
 });
 */
 
-/*
-router.post('/login', passport.authenticate('local'), function(req, res) {
-    console.log(req);
-    res.redirect('/')
-});
-*/
-
-router.get('/logout', function(req, res) {
-    req.logout();
-    res.redirect('/');
-});
 
 router.get('/ping', function(req, res) {
     res.status(200).send('pong!');

@@ -4,6 +4,8 @@ function htmlDecode(input){
     return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
 }
 
+var user = JSON.parse(htmlDecode(pu));
+
 var vote = JSON.parse(htmlDecode(pv));
 var v = vote.vote;
 var vm = vote.votemenu;
@@ -82,7 +84,7 @@ function showHeader() {
         {
             "id": "div_header_menu_user",
             "class": "div_header_menu_user",
-            html: '<a href="#" onclick="showLogin()" class="a_header_menu">Login</a>'
+            html: '<a href="/login" class="a_header_menu">Login</a>'
         });
     $div_header_menu.append($div_header_menu_user);
 
@@ -243,21 +245,25 @@ function loadTopic() {
         "class": "topic"
     });
 
+/*
     var $div_title = $('<div>',
     {
         "class": "topic_title",
         "html": '<span style="font-size:1.2em;">' + v.vote_title + '<span>'
     });
     $div_topic.append($div_title);
+*/
 
     var $div_topic_head = $('<div>',
         {
             "class": "topic_head"
         });
 
+/*
     var publish_time = calTimeLag(v.publish_time);
+*/
 
-    $div_topic_head.append('<div class="topic_head_publisher">' + '@liupeng ' + publish_time + '</div>');
+    $div_topic_head.append('<div class="topic_head_publisher">' + ' liupeng ' + '</div>');
 
     var expire_time = moment(v.expire_time, "YYYY-MM-DDThh:mm:ssZ")
     var $div_countdown = $('<div class="topic_head_countdown"></div>')
@@ -305,6 +311,9 @@ function loadTopic() {
             bar_color.push(v.bar_add_color);
         }
         //bar_note.push(i+1);
+        if (i >= 9) {
+            break;
+        }
     }
 
     var bar_percent = [];
@@ -828,14 +837,14 @@ function loadComment() {
             "class": "comment"
         });
 
-        var $div_comment_left = $('<div>',
-        {
-            "class": "comment_left",
-            html: '<a href="' + c["publisher"]["url"] + '">' +
-                    '<img src="' + c["publisher"]["icon"] + '" width="40px" height="40px" alt="funpis" title="funpis" />' +
-                  '</a>'
-        });
-        $div_comment.append($div_comment_left);
+            var $div_comment_left = $('<div>',
+            {
+                "class": "comment_left",
+                html: '<a href="' + c["publisher"]["url"] + '">' +
+                        '<img src="' + c["publisher"]["icon"] + '" width="40px" height="40px" alt="funpis" title="funpis" />' +
+                      '</a>'
+            });
+            $div_comment.append($div_comment_left);
 
         var $div_comment_right = $('<div>',
         {

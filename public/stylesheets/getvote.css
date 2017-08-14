@@ -63,6 +63,7 @@
     min-width: 50px;
 }
 
+/*
 #left_block>div>div.topic_title {
     width: 98%;
     height: 30px;
@@ -77,6 +78,7 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+*/
 
 #left_block>div>div.vote_graph {
     margin-top: 5px;
@@ -91,6 +93,7 @@
     */
 }
 
+/*
 #left_block>div>div.topic_title span {
     position: absolute;
     transform: translateX(0);
@@ -101,6 +104,7 @@
     cursor: pointer;
     transform: translateX(calc(280px - 100%));
 }
+*/
 
 #left_block>div>div.topic_foot {
     width: 98%;

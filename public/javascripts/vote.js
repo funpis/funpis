@@ -1,3 +1,14 @@
+function htmlDecode(input){
+    var e = document.createElement('div');
+    e.innerHTML = input;
+    return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+}
+
+var user = null;
+if (pu) {
+    user = JSON.parse(htmlDecode(pu));
+}
+
 $(document).ready(function() {
     $('#right_block').bottom({proximity: 0.02});
     $('#right_block').bind('bottom', function() {
@@ -27,6 +38,7 @@ $(document).ready(function() {
 
     adjustHeight();
 });
+
 
 function adjustHeight(){
     var hsize = $(document).height() - 100;
@@ -65,13 +77,23 @@ function showHeader() {
         });
     $('#header').append($div_header_menu);
 
-    var $div_header_menu_user = $('<div>',
-        {
-            "id": "div_header_menu_user",
-            "class": "div_header_menu_user",
-            html: '<a href="#" onclick="showLogin()" class="a_header_menu">Login</a>'
-        });
-    $div_header_menu.append($div_header_menu_user);
+    if (!user) {
+        var $div_header_menu_login = $('<div>',
+            {
+                "id": "div_header_menu_user",
+                "class": "div_header_menu_user",
+                html: '<a href="/login" class="a_header_menu">Login</a>'
+            });
+        $div_header_menu.append($div_header_menu_login);
+    } else {
+        var $div_header_menu_logout = $('<div>',
+            {
+                "id": "div_header_menu_user",
+                "class": "div_header_menu_user",
+                html: user.username + ' <a href="/logout" class="a_header_menu">Logout</a>'
+            });
+        $div_header_menu.append($div_header_menu_logout);
+    }
 
     var $div_header_menu_account = $('<div>',
         {

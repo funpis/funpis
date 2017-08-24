@@ -5,7 +5,7 @@ $(document).ready(function() {
         if (!obj.data('loading')) {
             obj.data('loading', true);
 
-            $('#panel').append('<div class="loading"><p>Loading...</p></div>');
+            $('#panel').append('<div class="loading"><p>Loading Votes...</p></div>');
 
             setTimeout(function() {
                 $('#panel>div.loading').remove();
@@ -19,7 +19,7 @@ $(document).ready(function() {
     $('html,body').animate({scrollTop: 0}, '1');
 
     showHeader();
-    showTabColumn();
+    //showTabColumn();
 
     readInitPics();
 });
@@ -46,38 +46,42 @@ function showHeader() {
         });
     $('#header').append($div_header_search);
 
-    var $div_header_menu = $('<div>',
+    var $div_header_account = $('<div>',
         {
-            "id": "div_header_menu",
-            "class": "div_header_menu"
+            "id": "div_header_account",
+            "class": "div_header_account"
         });
-    $('#header').append($div_header_menu);
+    $('#header').append($div_header_account);
 
-    var $div_header_menu_user = $('<div>',
+    var $div_header_account_user = $('<div>',
         {
-            "id": "div_header_menu_user",
-            "class": "div_header_menu_user",
-            html: '<a href="#" onclick="showLogin()" class="a_header_menu">Login</a>'
+            "id": "div_header_account_user",
+            "class": "div_header_account_user"
         });
-    $div_header_menu.append($div_header_menu_user);
+    if (!user) {
+        $div_header_account_user.html('<a href="/login" class="a_header_menu">Sign In</a>');
+    } else {
+        $div_header_account_user.html('<a href="/u/' + user.user_id + '" class="a_header_menu">' + user.username + '</a>');
+    }
+    $div_header_account.append($div_header_account_user);
 
     var $div_header_menu_account = $('<div>',
         {
             "id": "div_header_menu_account",
-            "class": "div_header_menu_account",
-            html: '<a href="#" onclick="createAccount()" class="a_header_menu">Register</a>'
+            "class": "div_header_account_user",
+            html: '<a href="#" onclick="createAccount()" class="a_header_menu">New Account</a>'
         });
-    $div_header_menu.append($div_header_menu_account);
+    $div_header_account.append($div_header_menu_account);
 
-    var $div_header_menu_account_question = $('<div>',
+    var $div_header_question = $('<div>',
         {
-            "id": "div_header_menu_account_question",
-            "class": "div_header_menu_account_question",
+            "id": "div_header_question",
+            "class": "div_header_question",
             html: '<a href="#" onclick="alert(1)">' +
                     '<img src="http://192.168.91.197:3000/images/question.mark.40.png" alt="question" title="question" />' +
                   '</a>'
         });
-    $div_header_menu.append($div_header_menu_account_question);
+    $('#header').append($div_header_question);
 }
 
 function showTabColumn() {

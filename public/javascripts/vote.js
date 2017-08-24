@@ -1,14 +1,3 @@
-function htmlDecode(input){
-    var e = document.createElement('div');
-    e.innerHTML = input;
-    return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
-}
-
-var user = null;
-if (pu) {
-    user = JSON.parse(htmlDecode(pu));
-}
-
 $(document).ready(function() {
     $('#right_block').bottom({proximity: 0.02});
     $('#right_block').bind('bottom', function() {

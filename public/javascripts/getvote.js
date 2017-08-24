@@ -1,11 +1,3 @@
-function htmlDecode(input){
-    var e = document.createElement('div');
-    e.innerHTML = input;
-    return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
-}
-
-var user = JSON.parse(htmlDecode(pu));
-
 var vote = JSON.parse(htmlDecode(pv));
 var v = vote.vote;
 var vm = vote.votemenu;

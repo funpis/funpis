@@ -1,20 +1,26 @@
-extends layout
-
-//- block content
-//-   if (!user)
-//-     a(href="/login") Login
-//-     br
-//-     a(href="/register") Register
-//-   if (user)
-//-     p You are currently logged in as #{user.username}
-//-     a(href="/logout") Logout
-
-block content
-  script(type='text/javascript' src='javascripts/frame.js')
-  #container
-    header
-      #header
-      #column_tab
-    article
-      #panel
+doctype html
+html
+  head
+    title= title
+    meta(charset='UTF-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    //- link(type='text/css', rel='stylesheet', href='/stylesheets/lightbox.css')
+    link(type='text/css', rel='stylesheet', href='/stylesheets/frame.css')
+    link(type='text/css', rel='stylesheet', href='/stylesheets/index.css')
+    //- script(src='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js')
+    script(type='text/javascript' src='/javascripts/jquery-1.12.4.min.js')
+    script(type='text/javascript' src='/javascripts/jquery.bottom-1.0.js')
+    script(type='text/javascript' src='/javascripts/jquery.countdown.min.js')
+    script.
+        var pu = '#{u}';
+    script(type='text/javascript' src='/javascripts/common.js')
+    script(type='text/javascript' src='/javascripts/index.js')
+  body
+    #container
+      header
+        #header
+        #column_tab
+      article
+        #panel
   

@@ -52,7 +52,7 @@ function make_user_str(user) {
         u_str = u_str.replace(/\//g, "\\/");
         u_str = u_str.replace(/\'/g, "\\'");
     }
-    console.log('u_str: ', u_str);
+    //console.log('u_str: ', u_str);
 
     return u_str;
 }
@@ -61,7 +61,7 @@ function make_user_str(user) {
 router.get('/', function(req, res, next) {
     u_str = make_user_str(req.user);
 
-    res.render('vote', {title: 'VoteRun', u: u_str});
+    res.render('index', {title: 'VoteRun', u: u_str});
 });
 
 /* Login page */
@@ -137,7 +137,63 @@ router.get('/v/:vid', function(req, res, next) {
         v_str = JSON.stringify(vote);
         v_str = v_str.replace(/\//g, "\\/");
         v_str = v_str.replace(/\'/g, "\\'");
-        console.log('v_str: ', v_str);
+        //console.log('v_str: ', v_str);
+
+        u_str = make_user_str(req.user);
+
+        return res.render('getvote', {title: 'VoteRun', u: u_str, v: v_str});
+    }); // VoteComment
+    }); // VoteTopic
+    }); // VoteOption
+    }); // VoteMenu
+    }); // Vote
+});
+
+/* GET user page by a user id. */
+router.get('/u/:uid', function(req, res, next) {
+    console.log('user_id=', req.params.uid);
+    var vid = req.params.vid;
+    Vote.findOne({'vote_id': vid}).exec(function(err, v) {
+        if (err || !v) {
+            console.error(err.stack);
+            return res.status(500).send('get Vote error');
+        }
+
+    VoteMenu.findOne({'vote_id': vid}).exec(function(err, vm) {
+        if (err || !vm) {
+            console.error(err.stack);
+            return res.status(500).send('get VoteMenu error');
+        }
+
+    VoteOption.findOne({'vote_id': vid}).lean().exec(function(err, vo) {
+        if (err || !vo) {
+            console.error(err.stack);
+            return res.status(500).send('get VoteOption error');
+        }
+
+    VoteTopic.findOne({'vote_id': vid}).lean().exec(function(err, vt) {
+        if (err || !vt) {
+            console.error(err.stack);
+            return res.status(500).send('get VoteTopic error');
+        }
+
+    VoteComment.find({'vote_id': vid}).lean().exec(function(err, vc) {
+        if (err || !vc) {
+            console.error(err.stack);
+            return res.status(500).send('get VoteComment error');
+        }
+
+        var vote = {};
+        vote.vote = v;
+        vote.votemenu = vm;
+        vote.voteoption = vo;
+        vote.votetopic = vt;
+        vote.votecomment = vc;
+
+        v_str = JSON.stringify(vote);
+        v_str = v_str.replace(/\//g, "\\/");
+        v_str = v_str.replace(/\'/g, "\\'");
+        //console.log('v_str: ', v_str);
 
         u_str = make_user_str(req.user);
 
